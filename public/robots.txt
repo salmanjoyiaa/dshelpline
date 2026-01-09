@@ -1,0 +1,17 @@
+# Robots.txt for ServiceFlow
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes from indexing
+Disallow: /dashboard
+Disallow: /api
+Disallow: /admin
+
+# Disallow sign in/up pages
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /forgot-password
+Disallow: /reset-password
+
+# Sitemap location (when available)
+# Sitemap: https://yourdomain.com/sitemap.xml
