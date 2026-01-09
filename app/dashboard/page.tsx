@@ -192,8 +192,6 @@ export default function DashboardPage() {
           ) : (
             <RequestsTable
               requests={recentRequests}
-              onEdit={() => {}}
-              onDelete={() => {}}
               isDarkMode={isDarkMode}
             />
           )}

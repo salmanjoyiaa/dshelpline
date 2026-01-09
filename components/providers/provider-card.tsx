@@ -48,18 +48,37 @@ export function ProviderCard({ provider }: ProviderCardProps) {
 
   const toggleStatus = async (newStatus: "active" | "inactive") => {
     setIsUpdating(true)
-    const supabase = createClient()
-    await supabase.from("providers").update({ status: newStatus }).eq("id", provider.id)
-    setIsUpdating(false)
-    router.refresh()
+    try {
+      const res = await fetch('/api/providers/update', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: provider.id, status: newStatus }),
+      })
+      const payload = await res.json()
+      if (!res.ok) throw new Error(payload?.error || 'Update failed')
+    } catch (err) {
+      // noop - show no crash in UI
+    } finally {
+      setIsUpdating(false)
+      router.refresh()
+    }
   }
 
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this provider?")) return
-
-    const supabase = createClient()
-    await supabase.from("providers").update({ is_active: false }).eq("id", provider.id)
-    router.refresh()
+    try {
+      const res = await fetch('/api/providers/delete', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: provider.id }),
+      })
+      const payload = await res.json()
+      if (!res.ok) throw new Error(payload?.error || 'Delete failed')
+    } catch (err) {
+      // noop
+    } finally {
+      router.refresh()
+    }
   }
 
   return (

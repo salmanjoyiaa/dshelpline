@@ -39,19 +39,32 @@ export function RequestDetailModal({ request, onClose }: RequestDetailModalProps
   const handleUpdateStatus = async (newStatus: ServiceRequest['status']) => {
     setStatus(newStatus)
     setIsSaving(true)
+    try {
+      const res = await fetch('/api/requests/update', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: request.id, status: newStatus }),
+      })
+      const payload = await res.json()
+      if (!res.ok) throw new Error(payload?.error || 'Update failed')
 
-    const supabase = createClient()
-    await supabase.from("service_requests").update({ status: newStatus }).eq("id", request.id)
-
-    // Add timeline entry
-    await supabase.from("request_timeline").insert({
-      request_id: request.id,
-      event_type: "status_change",
-      description: `Status changed to ${newStatus}`,
-    })
-
-    setIsSaving(false)
-    router.refresh()
+      // Try to append timeline entry client-side as a fallback
+      try {
+        const supabase = createClient()
+        await supabase.from('request_timeline').insert({
+          request_id: request.id,
+          event_type: 'status_change',
+          description: `Status changed to ${newStatus}`,
+        })
+      } catch (e) {
+        // ignore timeline errors
+      }
+    } catch (err) {
+      // swallow - UI will refresh regardless
+    } finally {
+      setIsSaving(false)
+      router.refresh()
+    }
   }
 
   const handleSaveNotes = async () => {

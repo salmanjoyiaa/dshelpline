@@ -101,12 +101,13 @@ export default function ProvidersPage() {
 
     setDeleteLoading(true);
     try {
-      const { error } = await supabase
-        .from('service_providers')
-        .update({ deleted_at: new Date().toISOString() })
-        .eq('id', deletingProvider.id);
-
-      if (error) throw error;
+      const res = await fetch('/api/providers/delete', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: deletingProvider.id }),
+      })
+      const payload = await res.json()
+      if (!res.ok) throw new Error(payload?.error || 'Delete failed')
 
       setDeletingProvider(null);
       toast({

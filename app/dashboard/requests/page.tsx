@@ -127,12 +127,13 @@ export default function RequestsPage() {
 
     setDeleteLoading(true);
     try {
-      const { error } = await supabase
-        .from('service_requests')
-        .update({ deleted_at: new Date().toISOString() })
-        .eq('id', deletingRequest.id);
-
-      if (error) throw error;
+      const res = await fetch('/api/requests/delete', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: deletingRequest.id }),
+      })
+      const payload = await res.json()
+      if (!res.ok) throw new Error(payload?.error || 'Delete failed')
 
       setDeletingRequest(null);
       toast({

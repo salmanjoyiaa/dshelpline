@@ -67,26 +67,22 @@ export function EditRequestDialog({
     setLoading(true);
 
     try {
-      // Check if status transition is valid
+      // Map 'new' label to pending if necessary and validate transition
+      const newStatus = ((formData.status as unknown as string) === 'new' ? 'pending' : formData.status) as ServiceRequest['status']
       const validTransitions = VALID_STATUS_TRANSITIONS[request.status];
-      if (!validTransitions.includes(formData.status)) {
-        setError(
-          `Cannot transition from ${request.status} to ${formData.status}`
-        );
+      if (!validTransitions.includes(newStatus)) {
+        setError(`Cannot transition from ${request.status} to ${newStatus}`);
         setLoading(false);
         return;
       }
 
-      const { error: updateError } = await supabase
-        .from('service_requests')
-        .update({
-          status: formData.status,
-          assigned_provider_id: formData.assigned_provider_id,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', request.id);
-
-      if (updateError) throw updateError;
+      const res = await fetch('/api/requests/update', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: request.id, status: newStatus, assigned_provider_id: formData.assigned_provider_id }),
+      })
+      const payload = await res.json()
+      if (!res.ok) throw new Error(payload?.error || 'Update failed')
 
       onOpenChange(false);
       onSuccess();

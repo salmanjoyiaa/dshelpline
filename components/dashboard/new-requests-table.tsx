@@ -16,8 +16,8 @@ import { Trash2, Edit2 } from 'lucide-react';
 
 interface RequestsTableProps {
   requests: (ServiceRequest & { service_providers?: ServiceProvider | null })[];
-  onEdit: (request: ServiceRequest) => void;
-  onDelete: (request: ServiceRequest) => void;
+  onEdit?: (request: ServiceRequest) => void;
+  onDelete?: (request: ServiceRequest) => void;
   loading?: boolean;
   isDarkMode?: boolean;
 }
@@ -58,7 +58,9 @@ export function RequestsTable({
             <TableHead className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>Status</TableHead>
             <TableHead className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>Provider</TableHead>
             <TableHead className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>Date</TableHead>
-            <TableHead className={`text-right ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>Actions</TableHead>
+              { (onEdit || onDelete) && (
+                <TableHead className={`text-right ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>Actions</TableHead>
+              ) }
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -80,24 +82,30 @@ export function RequestsTable({
                 {request.service_providers?.name || '-'}
               </TableCell>
               <TableCell className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>{formatDate(request.created_at)}</TableCell>
-              <TableCell className="text-right space-x-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onEdit(request)}
-                  className={isDarkMode ? 'border-slate-600/50 text-slate-300 hover:bg-slate-700/50' : 'border-gray-300 text-gray-600 hover:bg-gray-200 hover:border-gray-400'}
-                >
-                  <Edit2 className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onDelete(request)}
-                  className={isDarkMode ? 'border-slate-600/50 text-red-400 hover:bg-slate-700/50' : 'border-gray-300 text-red-600 hover:bg-red-50 hover:border-red-300'}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </TableCell>
+              { (onEdit || onDelete) && (
+                <TableCell className="text-right space-x-2">
+                  {onEdit && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => onEdit(request)}
+                      className={isDarkMode ? 'border-slate-600/50 text-slate-300 hover:bg-slate-700/50' : 'border-gray-300 text-gray-600 hover:bg-gray-200 hover:border-gray-400'}
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                  {onDelete && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => onDelete(request)}
+                      className={isDarkMode ? 'border-slate-600/50 text-red-400 hover:bg-slate-700/50' : 'border-gray-300 text-red-600 hover:bg-red-50 hover:border-red-300'}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  )}
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
