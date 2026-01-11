@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { useTheme } from '@/lib/theme-context';
 import { logger } from '@/lib/logger';
 import { ServiceRequest, ServiceProvider } from '@/lib/types';
 import { AddRequestDialog } from '@/components/dashboard/add-request-dialog';
@@ -22,7 +21,6 @@ import { useToast } from '@/hooks/use-toast';
 export default function RequestsPage() {
   const supabase = createClient();
   const { toast } = useToast();
-  const { isDarkMode } = useTheme();
 
   const [requests, setRequests] = useState<
     (ServiceRequest & { service_providers?: ServiceProvider | null })[]
@@ -163,8 +161,8 @@ export default function RequestsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Requests</h1>
-          <p className={`mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          <h1 className="text-3xl font-bold text-white">Requests</h1>
+          <p className="mt-1 text-gray-400">
             Manage all your service requests
           </p>
         </div>
@@ -185,9 +183,9 @@ export default function RequestsPage() {
       </div>
 
       {/* Filter */}
-      <Card className={`p-4 border-2 ${isDarkMode ? 'bg-slate-900/40 backdrop-blur-xl border-slate-700/50' : 'bg-white border-gray-300 hover:shadow-md transition-all'}`}>
+      <Card className="p-4 border-2 bg-slate-900/40 backdrop-blur-xl border-slate-700/50">
         <Select value={filter} onValueChange={setFilter}>
-          <SelectTrigger className={`w-48 ${isDarkMode ? 'bg-slate-800/50 border-slate-600/50 text-white' : 'bg-gray-50 border-gray-300 text-gray-900'}`}>
+          <SelectTrigger className="w-48 bg-slate-800/50 border-slate-600/50 text-white">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -202,13 +200,12 @@ export default function RequestsPage() {
       </Card>
 
       {/* Table */}
-      <Card className={`p-6 border-2 shadow-md hover:shadow-lg transition-all ${isDarkMode ? 'bg-slate-900/40 backdrop-blur-xl border-slate-700/50' : 'bg-white border-gray-300'}`}>
+      <Card className="p-6 border-2 shadow-md hover:shadow-lg transition-all bg-slate-900/40 backdrop-blur-xl border-slate-700/50">
         <RequestsTable
           requests={filteredRequests}
           onEdit={setEditingRequest}
           onDelete={setDeletingRequest}
           loading={loading}
-          isDarkMode={isDarkMode}
         />
       </Card>
 

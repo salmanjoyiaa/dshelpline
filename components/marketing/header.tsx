@@ -1,9 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Menu, X } from "lucide-react"
+import { Menu, X, Sun, Moon } from "lucide-react"
 import { DSLogo } from "@/components/ds-logo"
 
 const navLinks = [
@@ -14,6 +14,51 @@ const navLinks = [
 
 export function MarketingHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(true)
+  const [mounted, setMounted] = useState(false)
+
+  // Initialize theme from localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme-mode')
+    if (savedTheme) {
+      setIsDarkMode(savedTheme === 'dark')
+    } else {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      setIsDarkMode(prefersDark)
+    }
+    setMounted(true)
+  }, [])
+
+  const handleThemeToggle = () => {
+    const newMode = !isDarkMode
+    setIsDarkMode(newMode)
+    localStorage.setItem('theme-mode', newMode ? 'dark' : 'light')
+    
+    // Update HTML element class
+    if (newMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+    
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new CustomEvent('themeChange', { detail: { isDarkMode: newMode } }))
+  }
+
+  if (!mounted) {
+    return (
+      <header className="sticky top-0 z-50 w-full border-b border-yellow-600/20 bg-black/80 backdrop-blur-2xl supports-[backdrop-filter]:bg-black/70">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl shadow-lg group-hover:shadow-xl transition-shadow">
+              <DSLogo size={44} />
+            </div>
+            <span className="text-2xl font-bold text-yellow-400 hidden sm:inline">Dream State AI</span>
+          </Link>
+        </div>
+      </header>
+    )
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-yellow-600/20 bg-black/80 backdrop-blur-2xl supports-[backdrop-filter]:bg-black/70">
@@ -40,8 +85,19 @@ export function MarketingHeader() {
           ))}
         </nav>
 
-        {/* Desktop CTA */}
+        {/* Desktop CTA & Theme Toggle */}
         <div className="hidden items-center gap-3 md:flex">
+          <button
+            onClick={handleThemeToggle}
+            className="p-2 rounded-lg hover:bg-yellow-400/10 transition text-gray-300 hover:text-yellow-400"
+            title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            {isDarkMode ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
+          </button>
           <Button variant="ghost" asChild className="text-sm text-gray-300 hover:text-yellow-400 hover:bg-yellow-400/10 font-medium">
             <Link href="/login">Log in</Link>
           </Button>

@@ -5,8 +5,8 @@ const footerLinks = {
   Product: [
     { href: "/features", label: "Features" },
     { href: "/pricing", label: "Pricing" },
-    { href: "/integrations", label: "Integrations" },
-    { href: "/changelog", label: "Changelog" },
+    { href: "/projects", label: "Projects" },
+    { href: "/contact", label: "Contact" },
   ],
   Company: [
     { href: "/about", label: "About" },
@@ -29,33 +29,33 @@ const footerLinks = {
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t border-slate-200 bg-gradient-to-b from-white to-slate-50">
+    <footer className="border-t border-yellow-600/20 bg-black">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-6">
           {/* Brand */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-3 group w-fit">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 shadow-lg group-hover:shadow-xl transition-shadow">
-                <Zap className="h-6 w-6 text-white" />
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-lg group-hover:shadow-xl transition-shadow">
+                <Zap className="h-6 w-6 text-black" />
               </div>
-              <span className="text-2xl font-bold text-slate-900">ServiceFlow</span>
+              <span className="text-2xl font-bold text-white">Dream State AI</span>
             </Link>
-            <p className="max-w-xs text-base leading-relaxed text-slate-600">
-              AI-powered service dispatch that makes complex operations effortlessly simple. 
-              <strong className="text-slate-900"> Zero manual work. Maximum efficiency.</strong>
+            <p className="max-w-xs text-base leading-relaxed text-gray-300">
+              AI-powered solutions that transform how you manage operations.
+              <strong className="text-yellow-400"> Intelligent. Automated. Scalable.</strong>
             </p>
           </div>
 
           {/* Links */}
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
-              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">{category}</h3>
+              <h3 className="text-sm font-bold text-white uppercase tracking-wide">{category}</h3>
               <ul className="mt-6 space-y-4">
                 {links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-base text-slate-600 transition-all hover:text-blue-600 hover:translate-x-1 inline-block"
+                      className="text-base text-gray-300 transition-all hover:text-yellow-400 hover:translate-x-1 inline-block"
                     >
                       {link.label}
                     </Link>
@@ -67,15 +67,15 @@ export function MarketingFooter() {
         </div>
 
         {/* Divider & Bottom */}
-        <div className="mt-12 pt-8 border-t border-slate-200 space-y-4">
+        <div className="mt-12 pt-8 border-t border-yellow-600/20 space-y-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <p className="text-sm text-slate-600 font-medium">
+            <p className="text-sm text-gray-400 font-medium">
               &copy; {new Date().getFullYear()} Dream State AI. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <Link
                 href="#"
-                className="text-slate-600 transition-all hover:text-blue-600 hover:scale-110"
+                className="text-gray-300 transition-all hover:text-yellow-400 hover:scale-110"
                 aria-label="Twitter"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -84,7 +84,7 @@ export function MarketingFooter() {
               </Link>
               <Link
                 href="#"
-                className="text-slate-600 transition-colors hover:text-blue-600"
+                className="text-gray-300 transition-colors hover:text-yellow-400"
                 aria-label="LinkedIn"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -93,7 +93,7 @@ export function MarketingFooter() {
               </Link>
               <Link
                 href="#"
-                className="text-slate-600 transition-colors hover:text-blue-600"
+                className="text-gray-300 transition-colors hover:text-yellow-400"
                 aria-label="GitHub"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { useTheme } from '@/lib/theme-context';
 import { logger } from '@/lib/logger';
 import { ServiceProvider } from '@/lib/types';
 import { AddProviderDialog } from '@/components/dashboard/add-provider-dialog';
@@ -15,7 +14,6 @@ import { useToast } from '@/hooks/use-toast';
 export default function ProvidersPage() {
   const supabase = createClient();
   const { toast } = useToast();
-  const { isDarkMode } = useTheme();
 
   const [providers, setProviders] = useState<ServiceProvider[]>([]);
   const [userOrg, setUserOrg] = useState<string | null>(null);
@@ -132,8 +130,8 @@ export default function ProvidersPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Providers</h1>
-          <p className={`mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+          <h1 className="text-3xl font-bold text-white">Providers</h1>
+          <p className="mt-1 text-gray-400">
             Manage your service providers
           </p>
         </div>
@@ -153,13 +151,12 @@ export default function ProvidersPage() {
       </div>
 
       {/* Table */}
-      <Card className={`p-6 border-2 shadow-md hover:shadow-lg transition-all ${isDarkMode ? 'bg-slate-900/40 backdrop-blur-xl border-slate-700/50' : 'bg-white border-gray-300'}`}>
+      <Card className="p-6 border-2 shadow-md hover:shadow-lg transition-all bg-slate-900/40 backdrop-blur-xl border-slate-700/50">
         <ProvidersTable
           providers={providers}
           onEdit={setEditingProvider}
           onDelete={setDeletingProvider}
           loading={loading}
-          isDarkMode={isDarkMode}
         />
       </Card>
 

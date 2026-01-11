@@ -35,7 +35,7 @@ function DashboardLayoutContent({
   const supabase = createClient();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { isDarkMode, setIsDarkMode } = useTheme();
+  const isDarkMode = true; // Dashboard is always dark mode
 
   const handleSignOut = async () => {
     setLoading(true);
@@ -98,22 +98,29 @@ function DashboardLayoutContent({
               <div className="flex items-center gap-3">
                 {/* Light/Dark Mode Toggle */}
                 <button
-                  onClick={() => setIsDarkMode(!isDarkMode)}
-                  className={`p-2 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-yellow-400' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
-                  title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                  onClick={() => {
+                    // Toggle theme in localStorage and notify other components
+                    const newMode = !isDarkMode;
+                    localStorage.setItem('theme-mode', newMode ? 'dark' : 'light');
+                    if (newMode) {
+                      document.documentElement.classList.add('dark');
+                    } else {
+                      document.documentElement.classList.remove('dark');
+                    }
+                    window.dispatchEvent(new CustomEvent('themeChange', { detail: { isDarkMode: newMode } }));
+                    location.reload(); // Reload to apply theme change
+                  }}
+                  className="p-2 rounded-lg transition bg-slate-800 hover:bg-slate-700 text-yellow-400"
+                  title="Switch to Light Mode"
                 >
-                  {isDarkMode ? (
-                    <Sun className="w-5 h-5" />
-                  ) : (
-                    <Moon className="w-5 h-5" />
-                  )}
+                  <Sun className="w-5 h-5" />
                 </button>
 
                 {/* Sign Out Button */}
                 <Button
                   onClick={handleSignOut}
                   disabled={loading}
-                  className={`${isDarkMode ? 'bg-yellow-500 hover:bg-yellow-600 text-black font-semibold' : 'bg-yellow-400 text-black hover:bg-yellow-500 font-semibold'}`}
+                  className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold"
                 >
                   <LogOut className="w-4 h-4 mr-2" />
                   {loading ? 'Signing out...' : 'Sign Out'}
