@@ -3,26 +3,46 @@
 import React, { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { DSLogo } from "@/components/ds-logo"
-import { Eye, EyeOff, ArrowRight } from "lucide-react"
+import { Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react"
 
 export default function LoginPage() {
   const router = useRouter()
+  const supabase = createClient()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setError(null)
     setIsLoading(true)
-    // Simulate login
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    setIsLoading(false)
-    // Redirect to dashboard
-    router.push("/dashboard")
+
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) {
+        setError(error.message)
+        setIsLoading(false)
+        return
+      }
+
+      router.push("/dashboard")
+      router.refresh()
+    } catch (err) {
+      setError("An unexpected error occurred")
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -48,6 +68,14 @@ export default function LoginPage() {
           <h1 className="text-3xl font-bold text-white mb-2 text-center">Welcome Back</h1>
           <p className="text-gray-400 text-center mb-8">Sign in to your Dream State AI account</p>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-xl flex gap-3">
+              <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-red-300">{error}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}
             <div>
@@ -58,7 +86,10 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isLoading}
                 className="mt-2 bg-black/50 border-yellow-500/30 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20"
               />
             </div>
@@ -78,7 +109,10 @@ export default function LoginPage() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
+                  disabled={isLoading}
                   className="mt-2 bg-black/50 border-yellow-500/30 text-white placeholder:text-gray-500 focus:border-yellow-400 focus:ring-yellow-400/20 pr-10"
                 />
                 <button
@@ -102,6 +136,7 @@ export default function LoginPage() {
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
+                disabled={isLoading}
                 className="w-4 h-4 rounded border-yellow-500/30 bg-black/50 text-yellow-500 focus:ring-yellow-400/20"
               />
               <Label htmlFor="remember" className="text-gray-300 text-sm cursor-pointer">
@@ -142,6 +177,7 @@ export default function LoginPage() {
               type="button"
               variant="outline"
               className="w-full border-yellow-500/30 text-white hover:bg-yellow-500/10"
+              disabled={isLoading}
             >
               Continue with Google
             </Button>
@@ -149,6 +185,7 @@ export default function LoginPage() {
               type="button"
               variant="outline"
               className="w-full border-yellow-500/30 text-white hover:bg-yellow-500/10"
+              disabled={isLoading}
             >
               Continue with GitHub
             </Button>
