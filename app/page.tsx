@@ -109,9 +109,7 @@ export default function Home() {
                     Get Started Free
                   </Button>
                 </Link>
-                <Link href="/learn-more" className={`transition flex items-center gap-2 font-semibold ${isDarkMode ? 'text-yellow-400 hover:text-yellow-300' : 'text-gray-900 hover:text-yellow-600'}`}>
-                  Learn more <ArrowRight className="w-4 h-4" />
-                </Link>
+
               </div>
 
               {/* Trust Badges */}

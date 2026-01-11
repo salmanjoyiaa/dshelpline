@@ -159,7 +159,7 @@ export default function SignInPage() {
 
           {/* Footer Text */}
           <p className="text-center text-sm text-gray-400 mt-6">
-            New to ServiceFlow?{' '}
+            New to Dream State AI?{' '}
             <Link href="/" className="text-red-600 hover:text-red-700 transition font-semibold">
               Explore now
             </Link>

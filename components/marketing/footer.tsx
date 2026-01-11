@@ -70,7 +70,7 @@ export function MarketingFooter() {
         <div className="mt-12 pt-8 border-t border-slate-200 space-y-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <p className="text-sm text-slate-600 font-medium">
-              &copy; {new Date().getFullYear()} ServiceFlow. All rights reserved.
+              &copy; {new Date().getFullYear()} Dream State AI. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <Link

@@ -100,7 +100,7 @@ export function DashboardSidebar({ collapsed = false, onToggle }: SidebarProps) 
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 shadow-lg">
               <Zap className="h-6 w-6 text-white" />
             </div>
-            {!collapsed && <span className="text-xl font-bold text-slate-900">ServiceFlow</span>}
+            {!collapsed && <span className="text-xl font-bold text-slate-900">Dream State AI</span>}
           </Link>
         </div>
 

@@ -55,7 +55,7 @@ function DashboardLayoutContent({
         >
           <div className={`h-16 flex items-center px-6 border-b ${isDarkMode ? 'border-red-700/30' : 'border-gray-200'}`}>
             <Link href="/dashboard" className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-              ServiceFlow
+              Dream State AI
             </Link>
           </div>
 

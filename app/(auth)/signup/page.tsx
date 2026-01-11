@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -9,6 +10,7 @@ import { DSLogo } from "@/components/ds-logo"
 import { Eye, EyeOff, ArrowRight, Check, X } from "lucide-react"
 
 export default function SignupPage() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [password, setPassword] = useState("")
@@ -32,6 +34,8 @@ export default function SignupPage() {
     // Simulate signup
     await new Promise((resolve) => setTimeout(resolve, 1500))
     setIsLoading(false)
+    // Redirect to dashboard
+    router.push("/dashboard")
   }
 
   return (

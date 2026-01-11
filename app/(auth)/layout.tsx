@@ -11,12 +11,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-foreground/20">
             <Zap className="h-6 w-6 text-primary-foreground" />
           </div>
-          <span className="text-2xl font-semibold text-primary-foreground">ServiceFlow</span>
+          <span className="text-2xl font-semibold text-primary-foreground">Dream State AI</span>
         </Link>
 
         <div className="max-w-md">
           <blockquote className="text-xl leading-relaxed text-primary-foreground/90">
-            &ldquo;ServiceFlow transformed how we manage our field operations. Response times are down 40% and customer
+            &ldquo;Dream State AI transformed how we manage our operations. Efficiency is up 75% and customer
             satisfaction is at an all-time high.&rdquo;
           </blockquote>
           <div className="mt-6 flex items-center gap-4">
@@ -35,7 +35,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         <p className="text-sm text-primary-foreground/60">
-          &copy; {new Date().getFullYear()} ServiceFlow. All rights reserved.
+          &copy; {new Date().getFullYear()} Dream State AI. All rights reserved.
         </p>
       </div>
 
@@ -47,7 +47,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
               <Zap className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-semibold">ServiceFlow</span>
+            <span className="text-xl font-semibold">Dream State AI</span>
           </Link>
         </div>
 
