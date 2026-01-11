@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <!-- Circle border - yellow -->
+  <circle cx="90" cy="90" r="86" fill="none" stroke="#FFD700" stroke-width="8"/>
+  <!-- Inner circle - black background -->
+  <circle cx="90" cy="90" r="78" fill="#1a1a1a"/>
+  <!-- DS Text - yellow -->
+  <text x="90" y="115" font-family="Arial, sans-serif" font-size="90" font-weight="bold" fill="#FFD700" text-anchor="middle">DS</text>
+</svg>

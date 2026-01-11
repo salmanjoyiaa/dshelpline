@@ -1,5 +1,5 @@
 import { HeroSection } from "@/components/marketing/hero-section"
-import { AIBenefitsSection } from "@/components/marketing/ai-benefits-section"
+import { ServicesGrid } from "@/components/marketing/services-grid"
 import { HowItWorksSection } from "@/components/marketing/how-it-works-section"
 import { FeaturesSection } from "@/components/marketing/features-section"
 import { TestimonialsSection } from "@/components/marketing/testimonials-section"
@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSection />
-      <AIBenefitsSection />
+      <ServicesGrid />
       <HowItWorksSection />
       <FeaturesSection />
       <TestimonialsSection />

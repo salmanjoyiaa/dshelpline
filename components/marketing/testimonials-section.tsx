@@ -2,23 +2,23 @@ import { AIBackground } from "@/components/ui/ai-background"
 
 const testimonials = [
   {
-    quote: "ServiceFlow reduced our average response time by 40%. The AI matching is incredibly accurate.",
+    quote: "Dream State AI transformed our business operations. The automation solutions we implemented saved us 100+ hours monthly.",
     author: "Sarah Johnson",
     role: "Operations Director",
-    company: "ProServ HVAC",
+    company: "TechFlow Solutions",
   },
   {
-    quote: "We went from manually dispatching 50 jobs a day to handling 200+ with the same team. Game changer.",
+    quote: "Their AI consulting helped us understand the ROI potential. The custom implementation exceeded our expectations.",
     author: "Michael Chen",
     role: "CEO",
-    company: "QuickFix Plumbing",
+    company: "Innovation Labs",
   },
   {
     quote:
-      "The real-time tracking alone is worth the investment. Our customers love knowing exactly when help arrives.",
+      "The chatbot integration was seamless. Our customer support team can now focus on complex issues while AI handles routine inquiries.",
     author: "Emily Rodriguez",
     role: "Customer Success Manager",
-    company: "EliteGuard Security",
+    company: "CloudTech Inc",
   },
 ]
 
@@ -28,15 +28,15 @@ export function TestimonialsSection() {
       <AIBackground intensity="light" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Loved by service teams everywhere</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            See what our customers have to say about transforming their operations with ServiceFlow.
+          <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-white">Trusted by Innovative Companies</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-300">
+            See how leading companies are transforming their business with Dream State AI solutions.
           </p>
         </div>
 
         <div className="mt-16 grid gap-8 md:grid-cols-3">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.author} className="rounded-xl glass-effect p-6 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+            <div key={testimonial.author} className="rounded-xl border border-yellow-600/20 bg-black/40 backdrop-blur-xl p-6 transition-all duration-300 hover:border-yellow-400/50 hover:shadow-lg hover:shadow-yellow-400/10 hover:-translate-y-1">
               <div className="flex gap-1">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <svg key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" viewBox="0 0 20 20">
@@ -45,19 +45,19 @@ export function TestimonialsSection() {
                 ))}
               </div>
 
-              <blockquote className="mt-4 text-muted-foreground">&ldquo;{testimonial.quote}&rdquo;</blockquote>
+              <blockquote className="mt-4 text-gray-300">&ldquo;{testimonial.quote}&rdquo;</blockquote>
 
               <div className="mt-6 flex items-center gap-3">
                 <div
-                  className="h-10 w-10 rounded-full bg-muted"
+                  className="h-10 w-10 rounded-full bg-yellow-400"
                   style={{
                     backgroundImage: `url(/placeholder.svg?height=40&width=40&query=professional headshot ${testimonial.author})`,
                     backgroundSize: "cover",
                   }}
                 />
                 <div>
-                  <p className="font-medium">{testimonial.author}</p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="font-medium text-white">{testimonial.author}</p>
+                  <p className="text-sm text-gray-400">
                     {testimonial.role}, {testimonial.company}
                   </p>
                 </div>

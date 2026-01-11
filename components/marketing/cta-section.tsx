@@ -6,28 +6,29 @@ import { ArrowRight } from "lucide-react"
 export function CTASection() {
   return (
     <section className="relative overflow-hidden py-24 sm:py-32">
-      {/* Gradient background */}
-      <div className="absolute inset-0 ai-gradient" />
+      {/* Gradient background - Black to Yellow */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-yellow-400/5 to-transparent" />
       
       {/* AI Background overlay */}
-      <div className="absolute inset-0 opacity-30">
+      <div className="absolute inset-0 opacity-20">
         <AIBackground intensity="medium" />
       </div>
 
       <div className="relative mx-auto max-w-3xl px-6 text-center sm:px-8 lg:px-12">
         {/* Heading */}
         <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight">
-          Ready to Get Started?
+          Ready to Transform Your Business?
         </h2>
 
         {/* Subheading */}
-        <p className="text-lg text-white/90 max-w-xl mx-auto mb-10 leading-relaxed font-light">
-          Join thousands of service companies using AI-powered dispatch to transform their operations.
+        <p className="text-lg text-gray-300 max-w-xl mx-auto mb-10 leading-relaxed font-light">
+          Join innovative companies using Dream State AI to scale with intelligent automation, custom AI solutions, and expert guidance.
         </p>
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 items-center justify-center mb-8">
-          <Button size="lg" asChild className="bg-white hover:bg-slate-50 text-slate-900 hover:text-slate-700 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-6 rounded-xl text-sm">
+          <Button size="lg" asChild className="bg-yellow-400 hover:bg-yellow-500 text-black hover:text-black font-semibold shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-6 rounded-xl text-sm">
             <Link href="/signup">
               Start Free Trial
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -35,7 +36,7 @@ export function CTASection() {
           </Button>
           <Button
             size="lg"
-            className="border border-white/30 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 font-medium transition-all duration-300 px-8 py-6 rounded-xl text-sm"
+            className="border border-yellow-600/50 bg-yellow-400/10 backdrop-blur-sm text-yellow-400 hover:bg-yellow-400/20 hover:border-yellow-400 font-medium transition-all duration-300 px-8 py-6 rounded-xl text-sm"
             asChild
           >
             <Link href="/contact">Contact Sales</Link>
@@ -43,7 +44,7 @@ export function CTASection() {
         </div>
 
         {/* Trust message */}
-        <p className="text-sm text-white/70 font-medium">
+        <p className="text-sm text-gray-400 font-medium">
           No credit card required • 14-day free trial • Cancel anytime
         </p>
       </div>
