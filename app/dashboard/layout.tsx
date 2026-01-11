@@ -51,9 +51,9 @@ function DashboardLayoutContent({
         <aside
           className={`fixed inset-y-0 left-0 w-64 transform transition-transform duration-200 ease-in-out z-30 ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          } md:relative md:translate-x-0 border-r ${isDarkMode ? 'bg-slate-900 border-red-700/30' : 'bg-white border-gray-200'}`}
+          } md:relative md:translate-x-0 border-r ${isDarkMode ? 'bg-slate-900 border-yellow-500/30' : 'bg-white border-gray-200'}`}
         >
-          <div className={`h-16 flex items-center px-6 border-b ${isDarkMode ? 'border-red-700/30' : 'border-gray-200'}`}>
+          <div className={`h-16 flex items-center px-6 border-b ${isDarkMode ? 'border-yellow-500/30' : 'border-gray-200'}`}>
             <Link href="/dashboard" className={`text-xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
               Dream State AI
             </Link>
@@ -80,7 +80,7 @@ function DashboardLayoutContent({
         {/* Main Content */}
         <div className="flex-1 flex flex-col min-h-screen">
           {/* Header */}
-          <header className={`${isDarkMode ? 'bg-slate-900 border-red-700/30' : 'bg-white border-gray-200'} border-b sticky top-0 z-20`}>
+          <header className={`${isDarkMode ? 'bg-slate-900 border-yellow-500/30' : 'bg-white border-gray-200'} border-b sticky top-0 z-20`}>
             <div className={`h-16 flex items-center justify-between px-6 ${isDarkMode ? 'bg-black/40' : ''}`}>
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -113,7 +113,7 @@ function DashboardLayoutContent({
                 <Button
                   onClick={handleSignOut}
                   disabled={loading}
-                  className={`${isDarkMode ? 'bg-red-700 hover:bg-red-800 text-white' : 'bg-red-600 text-white hover:bg-red-700'}`}
+                  className={`${isDarkMode ? 'bg-yellow-500 hover:bg-yellow-600 text-black font-semibold' : 'bg-yellow-400 text-black hover:bg-yellow-500 font-semibold'}`}
                 >
                   <LogOut className="w-4 h-4 mr-2" />
                   {loading ? 'Signing out...' : 'Sign Out'}

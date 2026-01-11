@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-
+/rag
 # next.js
 /.next/
 /out/

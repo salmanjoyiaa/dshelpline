@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { DSLogo } from "@/components/ds-logo"
 import { ExternalLink, Star, TrendingUp, Users, Target, Zap } from "lucide-react"
@@ -318,12 +319,14 @@ export default function ProjectsPage() {
       </div>
 
       {/* Footer CTA */}
-      <div className="border-t border-yellow-500/20 py-12 px-4">
+      <div className="border-t border-yellow-500/20 bg-black/40 py-12 px-4">
         <div className="text-center">
           <p className="text-gray-400 mb-4">Have a project in mind?</p>
-          <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
-            Get in Touch
-          </Button>
+          <Link href="/contact">
+            <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
+              Get in Touch
+            </Button>
+          </Link>
         </div>
       </div>
     </main>
