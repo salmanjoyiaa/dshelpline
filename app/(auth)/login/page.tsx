@@ -37,7 +37,12 @@ export default function LoginPage() {
         return
       }
 
-      router.push("/dashboard")
+      // Redirect zuhab@propertyagent.com to Property Assistant, others to dashboard
+      const redirectUrl = email.toLowerCase() === 'zuhab@propertyagent.com' 
+        ? '/dashboard/rag' 
+        : '/dashboard'
+      
+      router.push(redirectUrl)
       router.refresh()
     } catch (err) {
       setError("An unexpected error occurred")

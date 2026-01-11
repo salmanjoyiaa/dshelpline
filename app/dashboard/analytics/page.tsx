@@ -14,7 +14,7 @@ export default function AnalyticsPage() {
   const supabase = createClient();
   const { toast } = useToast();
 
-  const [requests, setRequests] = useState<ServiceRequest[]>([]);
+  const [requests, setRequests] = useState<any[]>([]);
   const [providers, setProviders] = useState<ServiceProvider[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,6 +33,42 @@ export default function AnalyticsPage() {
         } = await supabase.auth.getUser();
 
         if (!user) return;
+
+        // Demo data for zuhab@propertyagent.com
+        if (user.email?.toLowerCase() === 'zuhab@propertyagent.com') {
+          const dummyRequests = [
+            { id: '1', organization_id: user.id, title: 'Hot Tub Maintenance', description: '', status: 'in_progress', priority: 'high', assigned_provider_id: '1', created_at: new Date('2024-01-15').toISOString(), updated_at: new Date('2024-01-16').toISOString(), completed_at: null, deleted_at: null },
+            { id: '2', organization_id: user.id, title: 'Pool Cleaning', description: '', status: 'completed', priority: 'medium', assigned_provider_id: '2', created_at: new Date('2024-01-10').toISOString(), updated_at: new Date('2024-01-14').toISOString(), completed_at: new Date('2024-01-14').toISOString(), deleted_at: null },
+            { id: '3', organization_id: user.id, title: 'WiFi Router Setup', description: '', status: 'assigned', priority: 'medium', assigned_provider_id: '3', created_at: new Date('2024-01-17').toISOString(), updated_at: new Date('2024-01-17').toISOString(), completed_at: null, deleted_at: null },
+            { id: '4', organization_id: user.id, title: 'HVAC Filter Change', description: '', status: 'pending', priority: 'low', assigned_provider_id: null, created_at: new Date('2024-01-16').toISOString(), updated_at: new Date('2024-01-16').toISOString(), completed_at: null, deleted_at: null },
+            { id: '5', organization_id: user.id, title: 'Landscape Maintenance', description: '', status: 'completed', priority: 'medium', assigned_provider_id: '1', created_at: new Date('2024-01-08').toISOString(), updated_at: new Date('2024-01-12').toISOString(), completed_at: new Date('2024-01-12').toISOString(), deleted_at: null },
+          ];
+
+          const dummyProviders: ServiceProvider[] = [
+            { id: '1', name: 'John Smith', phone: '555-0101', email: 'john@example.com', status: 'active', rating: 4.8, total_jobs_completed: 24, organization_id: user.id, created_at: new Date('2024-01-01').toISOString(), updated_at: new Date('2024-01-17').toISOString(), deleted_at: null },
+            { id: '2', name: 'Maria Garcia', phone: '555-0102', email: 'maria@example.com', status: 'active', rating: 4.9, total_jobs_completed: 19, organization_id: user.id, created_at: new Date('2024-01-01').toISOString(), updated_at: new Date('2024-01-17').toISOString(), deleted_at: null },
+            { id: '3', name: 'Tech Solutions', phone: '555-0103', email: 'tech@example.com', status: 'active', rating: 4.7, total_jobs_completed: 31, organization_id: user.id, created_at: new Date('2024-01-02').toISOString(), updated_at: new Date('2024-01-17').toISOString(), deleted_at: null },
+          ];
+
+          setRequests(dummyRequests);
+          setProviders(dummyProviders);
+
+          // Calculate analytics from dummy data
+          const totalRequests = dummyRequests.length;
+          const completedRequests = dummyRequests.filter((r) => r.status === 'completed').length;
+          const completionRate = totalRequests > 0 ? Math.round((completedRequests / totalRequests) * 100) : 0;
+          const activeProvidersCount = dummyProviders.filter((p) => p.status === 'active').length;
+
+          setAnalytics({
+            totalRequests,
+            completionRate,
+            avgResponseTime: 2.5,
+            activeProviders: activeProvidersCount,
+          });
+
+          setLoading(false);
+          return;
+        }
 
         const { data: userData } = await supabase
           .from('users')

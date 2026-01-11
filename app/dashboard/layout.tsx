@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
@@ -20,13 +20,18 @@ import {
   Zap,
 } from 'lucide-react';
 
-const navItems = [
+const baseNavItems = [
   { href: '/dashboard', label: 'Overview', icon: Home },
   { href: '/dashboard/requests', label: 'Requests', icon: FileText },
   { href: '/dashboard/providers', label: 'Providers', icon: Users },
   { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
-  { href: '/dashboard/rag', label: 'Property Assistant', icon: Zap },
 ];
+
+const propertyAssistantItem = {
+  href: '/dashboard/rag',
+  label: 'Property Assistant',
+  icon: Zap,
+};
 
 function DashboardLayoutContent({
   children,
@@ -37,7 +42,27 @@ function DashboardLayoutContent({
   const supabase = createClient();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [navItems, setNavItems] = useState(baseNavItems);
   const isDarkMode = true; // Dashboard is always dark mode
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user?.email) {
+        setUserEmail(user.email);
+        // Only show Property Assistant to zuhab@propertyagent.com
+        if (user.email.toLowerCase() === 'zuhab@propertyagent.com') {
+          setNavItems([...baseNavItems, propertyAssistantItem]);
+        }
+      }
+    };
+
+    fetchUser();
+  }, [supabase]);
 
   const handleSignOut = async () => {
     setLoading(true);

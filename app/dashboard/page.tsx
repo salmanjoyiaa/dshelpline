@@ -20,9 +20,7 @@ export default function DashboardPage() {
     totalProviders: 0,
     completedThisMonth: 0,
   });
-  const [recentRequests, setRecentRequests] = useState<
-    (ServiceRequest & { service_providers?: ServiceProvider | null })[]
-  >([]);
+  const [recentRequests, setRecentRequests] = useState<any[]>([]);
   const [userOrg, setUserOrg] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +33,94 @@ export default function DashboardPage() {
         } = await supabase.auth.getUser();
 
         if (!user) return;
+
+        // Use dummy data for zuhab@propertyagent.com
+        if (user.email?.toLowerCase() === 'zuhab@propertyagent.com') {
+          setStats({
+            totalRequests: 24,
+            activeJobs: 8,
+            totalProviders: 12,
+            completedThisMonth: 16,
+          });
+
+          setRecentRequests([
+            {
+              id: '1',
+              title: 'Hot Tub Maintenance',
+              description: 'Hot tub needs filter cleaning and water treatment',
+              status: 'in_progress',
+              priority: 'high',
+              created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+              organization_id: 'demo',
+              service_type: null,
+              assigned_provider_id: 'p1',
+              service_providers: {
+                id: 'p1',
+                name: 'John Smith',
+                phone: '555-0101',
+                email: 'john@example.com',
+                status: 'active',
+                rating: 4.8,
+                organization_id: 'demo',
+                total_jobs_completed: 45,
+                deleted_at: null,
+                created_at: new Date('2024-01-01').toISOString(),
+                updated_at: new Date('2024-01-17').toISOString(),
+              }
+            },
+            {
+              id: '2',
+              title: 'Pool Cleaning',
+              description: 'Weekly pool cleaning and chemical balance',
+              status: 'completed',
+              priority: 'medium',
+              created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+              organization_id: 'demo',
+              service_type: null,
+              assigned_provider_id: 'p2',
+              service_providers: {
+                id: 'p2',
+                name: 'Maria Garcia',
+                phone: '555-0102',
+                email: 'maria@example.com',
+                status: 'active',
+                rating: 4.9,
+                organization_id: 'demo',
+                total_jobs_completed: 52,
+                deleted_at: null,
+                created_at: new Date('2024-01-01').toISOString(),
+                updated_at: new Date('2024-01-17').toISOString(),
+              }
+            },
+            {
+              id: '3',
+              title: 'WiFi Router Setup',
+              description: 'Install and configure WiFi router for property',
+              status: 'assigned',
+              priority: 'medium',
+              created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+              organization_id: 'demo',
+              service_type: null,
+              assigned_provider_id: 'p3',
+              service_providers: {
+                id: 'p3',
+                name: 'Tech Solutions',
+                phone: '555-0103',
+                email: 'tech@example.com',
+                status: 'active',
+                rating: 4.7,
+                organization_id: 'demo',
+                total_jobs_completed: 38,
+                deleted_at: null,
+                created_at: new Date('2024-01-02').toISOString(),
+                updated_at: new Date('2024-01-17').toISOString(),
+              }
+            },
+          ]);
+
+          setLoading(false);
+          return;
+        }
 
         // Get user's organization
         const { data: userData } = await supabase
