@@ -17,6 +17,7 @@ import {
   Home,
   Sun,
   Moon,
+  Zap,
 } from 'lucide-react';
 
 const navItems = [
@@ -24,6 +25,7 @@ const navItems = [
   { href: '/dashboard/requests', label: 'Requests', icon: FileText },
   { href: '/dashboard/providers', label: 'Providers', icon: Users },
   { href: '/dashboard/analytics', label: 'Analytics', icon: BarChart3 },
+  { href: '/dashboard/rag', label: 'Property Assistant', icon: Zap },
 ];
 
 function DashboardLayoutContent({
