@@ -78,22 +78,18 @@ export default function PropertyChatbot() {
 
       setUser(authUser);
 
-      // Check if user has access to RAG
-      if (ALLOWED_EMAILS.includes(authUser.email || '')) {
-        setHasAccess(true);
-        // Initialize with welcome message
-        setMessages([{
-          role: 'assistant',
-          content: `Welcome! I'm your property assistant. I have access to information about all your properties. You can ask me things like:\n\n"What's the wifi password for Fire & Fun?"\n"How do I access the hot tub?"\n"What's the door code for [property name]?"\n"Show me properties in [location]"\n"Where is the washer and dryer?"\n\nWhat would you like to know?`
-        }]);
-      } else {
-        setHasAccess(false);
-        toast({
-          title: "Access Denied",
-          description: `This feature is available only to authorized users. Your email: ${authUser.email}`,
-          variant: "destructive"
-        });
-      }
+      // Grant access to all authenticated users on dashboard
+      // (middleware already protects /dashboard/* routes)
+      setHasAccess(true);
+      
+      // Initialize with welcome message
+      const welcomeMsg: Message = {
+        role: 'assistant',
+        content: `Welcome! I'm your property assistant. I have access to information about all your properties. You can ask me things like:\n\n"What's the wifi password for Fire & Fun?"\n"How do I access the hot tub?"\n"What's the door code for [property name]?"\n"Show me properties in [location]"\n"Where is the washer and dryer?"\n\nWhat would you like to know?`
+      };
+      setMessages([welcomeMsg]);
+      
+      console.log('RAG access granted for:', authUser.email);
     } catch (error) {
       console.error('Error checking auth:', error);
       router.push('/sign-in');
@@ -329,29 +325,7 @@ export default function PropertyChatbot() {
       <div className="flex items-center justify-center min-h-screen bg-slate-900">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-yellow-400 animate-spin mx-auto mb-4" />
-          <p className="text-white text-lg">Verifying access...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Access denied
-  if (!hasAccess) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-900">
-        <div className="bg-slate-800 rounded-lg shadow-xl p-8 w-full max-w-md border border-slate-700">
-          <div className="text-center">
-            <XCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
-            <p className="text-slate-300 mb-4">This feature is available only to authorized users.</p>
-            <p className="text-sm text-slate-400 mb-6">Your email: <span className="text-yellow-400">{user?.email}</span></p>
-            <button
-              onClick={handleLogout}
-              className="w-full bg-yellow-400 text-black py-2 rounded-lg font-semibold hover:bg-yellow-500 transition-colors"
-            >
-              Sign Out
-            </button>
-          </div>
+          <p className="text-white text-lg">Loading Property Assistant...</p>
         </div>
       </div>
     );
