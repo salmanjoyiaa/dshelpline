@@ -64,7 +64,7 @@ export default function Home() {
                   <Moon className="w-5 h-5" />
                 )}
               </button>
-              <Link href="/sign-in">
+              <Link href="/login">
                 <Button className="bg-yellow-400 text-black hover:bg-yellow-500 font-semibold">
                   Sign In
                 </Button>
@@ -104,14 +104,14 @@ export default function Home() {
 
               {/* CTA Buttons */}
               <div className="flex items-center gap-4 pt-4">
-                <Link href="/sign-in">
+                <Link href="/signup">
                   <Button className="bg-yellow-400 text-black hover:bg-yellow-500 font-bold px-8 py-3 text-lg rounded-full">
                     Get Started Free
                   </Button>
                 </Link>
-                <button className={`transition flex items-center gap-2 font-semibold ${isDarkMode ? 'text-yellow-400 hover:text-yellow-300' : 'text-gray-900 hover:text-yellow-600'}`}>
+                <Link href="/learn-more" className={`transition flex items-center gap-2 font-semibold ${isDarkMode ? 'text-yellow-400 hover:text-yellow-300' : 'text-gray-900 hover:text-yellow-600'}`}>
                   Learn more <ArrowRight className="w-4 h-4" />
-                </button>
+                </Link>
               </div>
 
               {/* Trust Badges */}
@@ -289,14 +289,14 @@ export default function Home() {
               Join innovative companies using Dream State AI to scale their operations with intelligent automation and custom AI solutions.
             </p>
             <div className="flex items-center justify-center gap-4">
-              <Link href="/sign-in">
+              <Link href="/signup">
                 <Button className={`font-bold px-8 py-3 text-lg rounded-full ${isDarkMode ? 'bg-yellow-400 text-black hover:bg-yellow-500' : 'bg-yellow-500 text-white hover:bg-yellow-600'}`}>
                   Get Started Now
                 </Button>
               </Link>
-              <button className={`transition px-8 py-3 rounded-full font-semibold ${isDarkMode ? 'text-yellow-400 hover:text-yellow-300 border border-yellow-600/50 hover:border-yellow-400' : 'text-gray-900 hover:text-yellow-600 border border-gray-300 hover:border-yellow-600'}`}>
-                Learn More
-              </button>
+              <Link href="/projects" className={`transition px-8 py-3 rounded-full font-semibold ${isDarkMode ? 'text-yellow-400 hover:text-yellow-300 border border-yellow-600/50 hover:border-yellow-400' : 'text-gray-900 hover:text-yellow-600 border border-gray-300 hover:border-yellow-600'}`}>
+                View Projects
+              </Link>
             </div>
           </div>
         </div>

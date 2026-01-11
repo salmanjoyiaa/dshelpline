@@ -7,9 +7,9 @@ import { Menu, X } from "lucide-react"
 import { DSLogo } from "@/components/ds-logo"
 
 const navLinks = [
-  { href: "/features", label: "Features" },
+  { href: "/learn-more", label: "Services" },
+  { href: "/projects", label: "Projects" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ]
 

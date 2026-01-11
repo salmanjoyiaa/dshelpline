@@ -10,17 +10,21 @@ const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono"
 
 export const metadata: Metadata = {
   title: {
-    default: "ServiceFlow - AI-Powered Service Dispatch Platform",
-    template: "%s | ServiceFlow",
+    default: "Dream State AI - Intelligent AI Solutions & Automation",
+    template: "%s | Dream State AI",
   },
   description:
-    "Streamline your field service operations with intelligent dispatch, real-time tracking, and automated provider assignment.",
-  keywords: ["service dispatch", "field service", "provider management", "AI dispatch", "service requests"],
-    generator: 'v0.app'
+    "Transform your business with AI-powered automation, custom solutions, and intelligent systems. 50+ successful projects, 98% client satisfaction, $45M+ ROI generated.",
+  keywords: ["AI automation", "AI solutions", "custom development", "AI consulting", "business automation", "machine learning"],
+  generator: 'v0.app',
+  icons: {
+    icon: "/ds-icon.svg",
+    apple: "/ds-icon.svg",
+  },
 }
 
 export const viewport: Viewport = {
-  themeColor: "#2563EB",
+  themeColor: "#FFD700",
   width: "device-width",
   initialScale: 1,
 }
