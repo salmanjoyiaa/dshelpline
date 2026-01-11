@@ -47,56 +47,44 @@ export default function PropertyChatbot() {
   const supabase = createClient();
 
   const [user, setUser] = useState<any>(null);
-  const [hasAccess, setHasAccess] = useState(false);
-  const [accessLoading, setAccessLoading] = useState(true);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      role: 'assistant',
+      content: `Welcome! I'm your property assistant. I have access to information about all your properties. You can ask me things like:\n\n"What's the wifi password for Fire & Fun?"\n"How do I access the hot tub?"\n"What's the door code for [property name]?"\n"Show me properties in [location]"\n"Where is the washer and dryer?"\n\nWhat would you like to know?`
+    }
+  ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Check authentication and access on mount
+  // Check authentication on mount
   useEffect(() => {
-    checkAccessAndAuth();
+    const initUser = async () => {
+      try {
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        if (!authUser) {
+          router.push('/sign-in');
+          return;
+        }
+        setUser(authUser);
+        console.log('RAG loaded for user:', authUser.email);
+      } catch (error) {
+        console.error('Auth error:', error);
+        router.push('/sign-in');
+      } finally {
+        setPageLoading(false);
+      }
+    };
+    initUser();
   }, []);
 
   // Auto-scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-
-  const checkAccessAndAuth = async () => {
-    try {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
-
-      if (!authUser) {
-        // Redirect to sign-in if not authenticated
-        router.push('/sign-in');
-        return;
-      }
-
-      setUser(authUser);
-
-      // Grant access to all authenticated users on dashboard
-      // (middleware already protects /dashboard/* routes)
-      setHasAccess(true);
-      
-      // Initialize with welcome message
-      const welcomeMsg: Message = {
-        role: 'assistant',
-        content: `Welcome! I'm your property assistant. I have access to information about all your properties. You can ask me things like:\n\n"What's the wifi password for Fire & Fun?"\n"How do I access the hot tub?"\n"What's the door code for [property name]?"\n"Show me properties in [location]"\n"Where is the washer and dryer?"\n\nWhat would you like to know?`
-      };
-      setMessages([welcomeMsg]);
-      
-      console.log('RAG access granted for:', authUser.email);
-    } catch (error) {
-      console.error('Error checking auth:', error);
-      router.push('/sign-in');
-    } finally {
-      setAccessLoading(false);
-    }
-  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -320,9 +308,9 @@ export default function PropertyChatbot() {
   };
 
   // Loading state
-  if (accessLoading) {
+  if (pageLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-900">
+      <div className="flex items-center justify-center h-screen bg-slate-900">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-yellow-400 animate-spin mx-auto mb-4" />
           <p className="text-white text-lg">Loading Property Assistant...</p>
@@ -331,7 +319,7 @@ export default function PropertyChatbot() {
     );
   }
 
-  // Chat interface
+  // Chat interface (always render - middleware protects this route)
   return (
     <div className="flex flex-col h-full bg-slate-900 rounded-lg shadow-lg overflow-hidden">
       {/* Header */}
