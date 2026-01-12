@@ -28,8 +28,7 @@ export default function ProvidersPage() {
   const [deletingProvider, setDeletingProvider] = useState<ServiceProvider | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const loadInitialData = useCallback(async () => {
     try {
       const {
         data: { user },
@@ -48,16 +47,29 @@ export default function ProvidersPage() {
         if (userData?.organization_id) {
           setUserOrg(userData.organization_id);
         } else {
-          // Fallback: use user ID as a temporary org ID for UI purposes
           setUserOrg(user.id);
         }
       } catch (orgError) {
-        // If organization query fails, use user ID as fallback
         logger.warn('Could not fetch organization', orgError);
         setUserOrg(user.id);
       }
+    } catch (error) {
+      logger.error('Error loading initial data', error);
+    }
+  }, [supabase]);
 
-      // Try to fetch providers, but handle gracefully if table doesn't exist
+  const fetchProviders = useCallback(async (page: number) => {
+    setLoading(true);
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
       let orgId = user.id; // fallback org ID
       try {
         const { data: userData } = await supabase
@@ -72,39 +84,37 @@ export default function ProvidersPage() {
         logger.warn('Could not fetch organization', e);
       }
 
-      try {
-        const start = (currentPage - 1) * ITEMS_PER_PAGE;
-        const end = start + ITEMS_PER_PAGE - 1;
+      const start = (page - 1) * ITEMS_PER_PAGE;
+      const end = start + ITEMS_PER_PAGE - 1;
 
-        const { data: providersData, count } = await supabase
-          .from('service_providers')
-          .select('*', { count: 'exact' })
-          .eq('organization_id', orgId)
-          .is('deleted_at', null)
-          .order('name')
-          .range(start, end);
-        setProviders(providersData || []);
-        setTotalCount(count || 0);
-      } catch (providerError) {
-        logger.warn('Could not fetch providers', providerError);
-        setProviders([]);
-        setTotalCount(0);
-      }
-    } catch (error) {
-      logger.error('Error fetching data', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch providers',
-        variant: 'destructive',
-      });
+      const { data: providersData, count } = await supabase
+        .from('service_providers')
+        .select('*', { count: 'exact' })
+        .eq('organization_id', orgId)
+        .is('deleted_at', null)
+        .order('name')
+        .range(start, end);
+      
+      setProviders(providersData || []);
+      setTotalCount(count || 0);
+    } catch (providerError) {
+      logger.warn('Could not fetch providers', providerError);
+      setProviders([]);
+      setTotalCount(0);
     } finally {
       setLoading(false);
     }
-  }, [supabase, toast, currentPage]);
+  }, [supabase]);
 
+  // Load initial data once on mount
   useEffect(() => {
-    fetchData();
-  }, [currentPage]);
+    loadInitialData();
+  }, [loadInitialData]);
+
+  // Fetch providers when page changes
+  useEffect(() => {
+    fetchProviders(currentPage);
+  }, [currentPage, fetchProviders]);
 
   const handleDelete = async () => {
     if (!deletingProvider) return;
@@ -124,7 +134,7 @@ export default function ProvidersPage() {
         title: 'Success',
         description: 'Provider deleted successfully',
       });
-      fetchData();
+      fetchProviders(currentPage);
     } catch (error) {
       toast({
         title: 'Error',
@@ -150,7 +160,7 @@ export default function ProvidersPage() {
         {userOrg && (
           <AddProviderDialog
             organizationId={userOrg}
-            onSuccess={fetchData}
+            onSuccess={() => fetchProviders(1)}
             onError={(error) =>
               toast({
                 title: 'Error',
@@ -189,7 +199,7 @@ export default function ProvidersPage() {
         provider={editingProvider}
         open={!!editingProvider}
         onOpenChange={(open) => !open && setEditingProvider(null)}
-        onSuccess={fetchData}
+        onSuccess={() => fetchProviders(currentPage)}
         onError={(error) =>
           toast({
             title: 'Error',

@@ -37,8 +37,7 @@ export default function RequestsPage() {
   const [deletingRequest, setDeletingRequest] = useState<ServiceRequest | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const loadInitialData = useCallback(async () => {
     try {
       const {
         data: { user },
@@ -62,46 +61,11 @@ export default function RequestsPage() {
           setUserOrg(user.id);
         }
       } catch (orgError) {
-        // If organization query fails, use user ID as fallback
         logger.warn('Could not fetch organization', orgError);
         setUserOrg(user.id);
       }
 
-      // Try to fetch requests with pagination
-      try {
-        const start = (currentPage - 1) * ITEMS_PER_PAGE;
-        const end = start + ITEMS_PER_PAGE - 1;
-
-        const { data: requestsData, count } = await supabase
-          .from('service_requests')
-          .select(
-            `
-            *,
-            service_providers:assigned_provider_id (
-              id,
-              name,
-              phone,
-              email,
-              status,
-              rating
-            )
-          `,
-            { count: 'exact' }
-          )
-          .eq('organization_id', orgId)
-          .is('deleted_at', null)
-          .order('created_at', { ascending: false })
-          .range(start, end);
-
-        setRequests(requestsData || []);
-        setTotalCount(count || 0);
-      } catch (requestError) {
-        logger.warn('Could not fetch requests', requestError);
-        setRequests([]);
-        setTotalCount(0);
-      }
-
-      // Try to fetch providers
+      // Try to fetch providers (no pagination)
       try {
         const { data: providersData } = await supabase
           .from('service_providers')
@@ -116,20 +80,83 @@ export default function RequestsPage() {
         setProviders([]);
       }
     } catch (error) {
-      logger.error('Error fetching data', error);
+      logger.error('Error loading initial data', error);
+    }
+  }, [supabase]);
+
+  const fetchRequests = useCallback(async (page: number) => {
+    setLoading(true);
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      // Get org ID
+      let orgId = user.id;
+      try {
+        const { data: userData } = await supabase
+          .from('users')
+          .select('organization_id')
+          .eq('id', user.id)
+          .single();
+        if (userData?.organization_id) orgId = userData.organization_id;
+      } catch (e) {
+        logger.warn('Could not fetch organization', e);
+      }
+
+      // Fetch requests with pagination
+      const start = (page - 1) * ITEMS_PER_PAGE;
+      const end = start + ITEMS_PER_PAGE - 1;
+
+      const { data: requestsData, count } = await supabase
+        .from('service_requests')
+        .select(
+          `
+          *,
+          service_providers:assigned_provider_id (
+            id,
+            name,
+            phone,
+            email,
+            status,
+            rating
+          )
+        `,
+          { count: 'exact' }
+        )
+        .eq('organization_id', orgId)
+        .is('deleted_at', null)
+        .order('created_at', { ascending: false })
+        .range(start, end);
+
+      setRequests(requestsData || []);
+      setTotalCount(count || 0);
+    } catch (error) {
+      logger.error('Error fetching requests', error);
       toast({
         title: 'Error',
-        description: 'Failed to fetch data',
+        description: 'Failed to fetch requests',
         variant: 'destructive',
       });
     } finally {
       setLoading(false);
     }
-  }, [supabase, toast, currentPage]);
+  }, [supabase, toast]);
 
+  // Load initial data once on mount
   useEffect(() => {
-    fetchData();
-  }, [currentPage]);
+    loadInitialData();
+  }, [loadInitialData]);
+
+  // Fetch requests when page changes
+  useEffect(() => {
+    fetchRequests(currentPage);
+  }, [currentPage, fetchRequests]);
 
   const handleDelete = async () => {
     if (!deletingRequest) return;
@@ -149,7 +176,7 @@ export default function RequestsPage() {
         title: 'Success',
         description: 'Request deleted successfully',
       });
-      fetchData();
+      fetchRequests(currentPage);
     } catch (error) {
       toast({
         title: 'Error',
@@ -181,7 +208,7 @@ export default function RequestsPage() {
           <AddRequestDialog
             providers={providers}
             organizationId={userOrg}
-            onSuccess={fetchData}
+            onSuccess={() => fetchRequests(1)}
             onError={(error) =>
               toast({
                 title: 'Error',
@@ -238,7 +265,7 @@ export default function RequestsPage() {
         providers={providers}
         open={!!editingRequest}
         onOpenChange={(open) => !open && setEditingRequest(null)}
-        onSuccess={fetchData}
+        onSuccess={() => fetchRequests(currentPage)}
         onError={(error) =>
           toast({
             title: 'Error',
