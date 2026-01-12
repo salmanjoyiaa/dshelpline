@@ -9,31 +9,32 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
+import { StatusBadge } from '@/components/ui/status-badge';
 import { Button } from '@/components/ui/button';
+import { EmptyState } from './empty-state';
 import { formatPhoneNumber } from '@/lib/utils';
-import { Trash2, Edit2, Star } from 'lucide-react';
+import { Trash2, Edit2, Users } from 'lucide-react';
 
 interface ProvidersTableProps {
   providers: ServiceProvider[];
   onEdit: (provider: ServiceProvider) => void;
   onDelete: (provider: ServiceProvider) => void;
+  onCreateNew?: () => void;
   loading?: boolean;
-  isDarkMode?: boolean;
 }
 
 export function ProvidersTable({
   providers,
   onEdit,
   onDelete,
+  onCreateNew,
   loading = false,
-  isDarkMode = true,
 }: ProvidersTableProps) {
   if (loading) {
     return (
       <div className="space-y-3">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className={`h-12 rounded animate-pulse ${isDarkMode ? 'bg-slate-700' : 'bg-gray-200'}`} />
+          <div key={i} className="h-12 rounded animate-pulse bg-slate-700" />
         ))}
       </div>
     );
@@ -41,68 +42,79 @@ export function ProvidersTable({
 
   if (providers.length === 0) {
     return (
-      <div className="text-center py-12">
-        <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>No providers found</p>
-      </div>
+      <EmptyState
+        icon={Users}
+        title="No service providers"
+        description="Add your first service provider to get started"
+        action={
+          onCreateNew
+            ? { label: 'Add Provider', onClick: onCreateNew }
+            : undefined
+        }
+      />
     );
   }
 
   return (
-    <div className={`border rounded-lg overflow-x-auto ${isDarkMode ? 'border-slate-700/50 bg-slate-800/20' : 'border-gray-300 bg-gray-50'}`}>
-      <Table>
-        <TableHeader>
-          <TableRow className={`border-b ${isDarkMode ? 'border-slate-700/50 hover:bg-slate-800/30' : 'border-gray-200 hover:bg-gray-100'}`}>
-            <TableHead className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>Name</TableHead>
-            <TableHead className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>Email</TableHead>
-            <TableHead className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>Phone</TableHead>
-            <TableHead className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>Status</TableHead>
-            <TableHead className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>Jobs Completed</TableHead>
-            <TableHead className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>Rating</TableHead>
-            <TableHead className={`text-right ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {providers.map((provider) => (
-            <TableRow key={provider.id} className={`border-b transition ${isDarkMode ? 'border-slate-700/50 hover:bg-slate-800/30' : 'border-gray-200 hover:bg-gray-100'}`}>
-              <TableCell className={`font-medium ${isDarkMode ? 'text-slate-200' : 'text-gray-900'}`}>{provider.name}</TableCell>
-              <TableCell className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>{provider.email}</TableCell>
-              <TableCell className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>{formatPhoneNumber(provider.phone)}</TableCell>
-              <TableCell>
-                <Badge
-                  variant={provider.status === 'active' ? 'default' : 'secondary'}
-                >
-                  {provider.status}
-                </Badge>
-              </TableCell>
-              <TableCell className={isDarkMode ? 'text-slate-300' : 'text-gray-700'}>{provider.total_jobs_completed}</TableCell>
-              <TableCell>
-                <div className={`flex items-center gap-1 ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>
-                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  <span>{provider.rating.toFixed(1)}</span>
-                </div>
-              </TableCell>
-              <TableCell className="text-right space-x-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onEdit(provider)}
-                  className={isDarkMode ? 'border-slate-600/50 text-slate-300 hover:bg-slate-700/50' : 'border-gray-300 text-gray-600 hover:bg-gray-200 hover:border-gray-400'}
-                >
-                  <Edit2 className="w-4 h-4" />
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onDelete(provider)}
-                  className={isDarkMode ? 'border-slate-600/50 text-red-400 hover:bg-slate-700/50' : 'border-gray-300 text-red-600 hover:bg-red-50 hover:border-red-300'}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </TableCell>
+    <div className="border border-slate-700/50 rounded-lg overflow-hidden bg-slate-800/20">
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader className="sticky top-0 z-10 bg-slate-900/50 backdrop-blur">
+            <TableRow className="border-b border-slate-700/50">
+              <TableHead className="text-slate-300 font-semibold">Name</TableHead>
+              <TableHead className="text-slate-300 font-semibold">Email</TableHead>
+              <TableHead className="text-slate-300 font-semibold">Phone</TableHead>
+              <TableHead className="text-slate-300 font-semibold">Status</TableHead>
+              <TableHead className="text-slate-300 font-semibold">Jobs</TableHead>
+              <TableHead className="text-slate-300 font-semibold">Rating</TableHead>
+              <TableHead className="text-right text-slate-300 font-semibold">Actions</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {providers.map((provider) => (
+              <TableRow
+                key={provider.id}
+                className="border-b border-slate-700/30 hover:bg-slate-800/50 transition-colors"
+              >
+                <TableCell className="font-medium text-slate-200">{provider.name}</TableCell>
+                <TableCell className="text-slate-300 text-sm">{provider.email}</TableCell>
+                <TableCell className="text-slate-300">{formatPhoneNumber(provider.phone)}</TableCell>
+                <TableCell>
+                  <StatusBadge
+                    status={provider.status as any}
+                    size="sm"
+                  />
+                </TableCell>
+                <TableCell className="text-slate-300">{provider.total_jobs_completed}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-1.5 text-slate-300">
+                    <span className="text-yellow-400">★</span>
+                    <span className="font-medium">{provider.rating.toFixed(1)}</span>
+                  </div>
+                </TableCell>
+                <TableCell className="text-right space-x-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => onEdit(provider)}
+                    className="border-slate-600/50 text-slate-300 hover:bg-slate-700 hover:text-white hover:border-slate-500"
+                  >
+                    <Edit2 className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => onDelete(provider)}
+                    className="border-slate-600/50 text-red-400 hover:bg-red-500/20 hover:border-red-500/50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
