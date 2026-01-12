@@ -104,7 +104,7 @@ export default function ProvidersPage() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [currentPage]);
 
   const handleDelete = async () => {
     if (!deletingProvider) return;

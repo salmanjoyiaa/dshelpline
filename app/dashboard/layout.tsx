@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { ErrorBoundary } from '@/components/error-boundary';
-import { ThemeProvider, useTheme } from '@/lib/theme-context';
 import {
   BarChart3,
   FileText,
@@ -40,13 +40,16 @@ function DashboardLayoutContent({
 }) {
   const router = useRouter();
   const supabase = createClient();
+  const { theme, setTheme } = useTheme();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [navItems, setNavItems] = useState(baseNavItems);
-  const isDarkMode = true; // Dashboard is always dark mode
+  const [mounted, setMounted] = useState(false);
+  const isDarkMode = theme === 'dark';
 
   useEffect(() => {
+    setMounted(true);
     const fetchUser = async () => {
       const {
         data: { user },
@@ -124,24 +127,23 @@ function DashboardLayoutContent({
 
               <div className="flex items-center gap-3">
                 {/* Light/Dark Mode Toggle */}
-                <button
-                  onClick={() => {
-                    // Toggle theme in localStorage and notify other components
-                    const newMode = !isDarkMode;
-                    localStorage.setItem('theme-mode', newMode ? 'dark' : 'light');
-                    if (newMode) {
-                      document.documentElement.classList.add('dark');
-                    } else {
-                      document.documentElement.classList.remove('dark');
-                    }
-                    window.dispatchEvent(new CustomEvent('themeChange', { detail: { isDarkMode: newMode } }));
-                    location.reload(); // Reload to apply theme change
-                  }}
-                  className="p-2 rounded-lg transition bg-slate-800 hover:bg-slate-700 text-yellow-400"
-                  title="Switch to Light Mode"
-                >
-                  <Sun className="w-5 h-5" />
-                </button>
+                {mounted && (
+                  <button
+                    onClick={() => setTheme(isDarkMode ? 'light' : 'dark')}
+                    className={`p-2 rounded-lg transition ${
+                      isDarkMode
+                        ? 'bg-slate-800 hover:bg-slate-700 text-yellow-400'
+                        : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                    }`}
+                    title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                  >
+                    {isDarkMode ? (
+                      <Sun className="w-5 h-5" />
+                    ) : (
+                      <Moon className="w-5 h-5" />
+                    )}
+                  </button>
+                )}
 
                 {/* Sign Out Button */}
                 <Button
@@ -179,9 +181,5 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <ThemeProvider>
-      <DashboardLayoutContent>{children}</DashboardLayoutContent>
-    </ThemeProvider>
-  );
+  return <DashboardLayoutContent>{children}</DashboardLayoutContent>;
 }

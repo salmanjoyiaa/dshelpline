@@ -129,7 +129,7 @@ export default function RequestsPage() {
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, [currentPage]);
 
   const handleDelete = async () => {
     if (!deletingRequest) return;
