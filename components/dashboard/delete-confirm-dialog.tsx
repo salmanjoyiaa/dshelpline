@@ -31,24 +31,29 @@ export function DeleteConfirmDialog({
 }: DeleteConfirmDialogProps) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
+      <AlertDialogContent className="border-red-500/30 bg-slate-900 backdrop-blur">
         <AlertDialogHeader>
           <div className="flex gap-3">
-            <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0" />
+            <AlertCircle className="w-6 h-6 text-red-400 flex-shrink-0 mt-0.5" />
             <div>
-              <AlertDialogTitle>{title}</AlertDialogTitle>
-              <AlertDialogDescription>{description}</AlertDialogDescription>
+              <AlertDialogTitle className="text-white">{title}</AlertDialogTitle>
+              <AlertDialogDescription className="text-slate-300 mt-2">
+                {description}
+              </AlertDialogDescription>
             </div>
           </div>
         </AlertDialogHeader>
-        <div className="flex gap-3 justify-end">
-          <AlertDialogCancel disabled={loading}>
+        <div className="flex gap-3 justify-end pt-4">
+          <AlertDialogCancel 
+            disabled={loading}
+            className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
+          >
             Cancel
           </AlertDialogCancel>
           <Button
-            variant="destructive"
             onClick={onConfirm}
             disabled={loading}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold"
           >
             {loading ? (
               <>
