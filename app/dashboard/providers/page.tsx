@@ -8,8 +8,11 @@ import { AddProviderDialog } from '@/components/dashboard/add-provider-dialog';
 import { EditProviderDialog } from '@/components/dashboard/edit-provider-dialog';
 import { DeleteConfirmDialog } from '@/components/dashboard/delete-confirm-dialog';
 import { ProvidersTable } from '@/components/dashboard/providers-table';
+import { PaginationControls } from '@/components/dashboard/pagination-controls';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+
+const ITEMS_PER_PAGE = 25;
 
 export default function ProvidersPage() {
   const supabase = createClient();
@@ -18,12 +21,15 @@ export default function ProvidersPage() {
   const [providers, setProviders] = useState<ServiceProvider[]>([]);
   const [userOrg, setUserOrg] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   const [editingProvider, setEditingProvider] = useState<ServiceProvider | null>(null);
   const [deletingProvider, setDeletingProvider] = useState<ServiceProvider | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const fetchData = useCallback(async () => {
+    setLoading(true);
     try {
       const {
         data: { user },
@@ -67,16 +73,22 @@ export default function ProvidersPage() {
       }
 
       try {
-        const { data: providersData } = await supabase
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        const end = start + ITEMS_PER_PAGE - 1;
+
+        const { data: providersData, count } = await supabase
           .from('service_providers')
-          .select('*')
+          .select('*', { count: 'exact' })
           .eq('organization_id', orgId)
           .is('deleted_at', null)
-          .order('name');
+          .order('name')
+          .range(start, end);
         setProviders(providersData || []);
+        setTotalCount(count || 0);
       } catch (providerError) {
         logger.warn('Could not fetch providers', providerError);
         setProviders([]);
+        setTotalCount(0);
       }
     } catch (error) {
       logger.error('Error fetching data', error);
@@ -88,7 +100,7 @@ export default function ProvidersPage() {
     } finally {
       setLoading(false);
     }
-  }, [supabase, toast]);
+  }, [supabase, toast, currentPage]);
 
   useEffect(() => {
     fetchData();
@@ -158,6 +170,18 @@ export default function ProvidersPage() {
           onDelete={setDeletingProvider}
           loading={loading}
         />
+        
+        {/* Pagination */}
+        {totalCount > ITEMS_PER_PAGE && (
+          <div className="mt-6 pt-6 border-t border-slate-700/50 flex justify-center">
+            <PaginationControls
+              currentPage={currentPage}
+              totalItems={totalCount}
+              itemsPerPage={ITEMS_PER_PAGE}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
       </Card>
 
       {/* Edit Dialog */}

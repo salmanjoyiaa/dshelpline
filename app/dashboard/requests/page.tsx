@@ -15,8 +15,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { PaginationControls } from '@/components/dashboard/pagination-controls';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+
+const ITEMS_PER_PAGE = 25
 
 export default function RequestsPage() {
   const supabase = createClient();
@@ -27,12 +30,15 @@ export default function RequestsPage() {
   const [userOrg, setUserOrg] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
   const [editingRequest, setEditingRequest] = useState<ServiceRequest | null>(null);
   const [deletingRequest, setDeletingRequest] = useState<ServiceRequest | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const fetchData = useCallback(async () => {
+    setLoading(true);
     try {
       const {
         data: { user },
@@ -61,9 +67,12 @@ export default function RequestsPage() {
         setUserOrg(user.id);
       }
 
-      // Try to fetch requests
+      // Try to fetch requests with pagination
       try {
-        const { data: requestsData } = await supabase
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        const end = start + ITEMS_PER_PAGE - 1;
+
+        const { data: requestsData, count } = await supabase
           .from('service_requests')
           .select(
             `
@@ -76,16 +85,20 @@ export default function RequestsPage() {
               status,
               rating
             )
-          `
+          `,
+            { count: 'exact' }
           )
           .eq('organization_id', orgId)
           .is('deleted_at', null)
-          .order('created_at', { ascending: false });
+          .order('created_at', { ascending: false })
+          .range(start, end);
 
         setRequests(requestsData || []);
+        setTotalCount(count || 0);
       } catch (requestError) {
         logger.warn('Could not fetch requests', requestError);
         setRequests([]);
+        setTotalCount(0);
       }
 
       // Try to fetch providers
@@ -112,7 +125,7 @@ export default function RequestsPage() {
     } finally {
       setLoading(false);
     }
-  }, [supabase, toast]);
+  }, [supabase, toast, currentPage]);
 
   useEffect(() => {
     fetchData();
@@ -205,6 +218,18 @@ export default function RequestsPage() {
           onDelete={setDeletingRequest}
           loading={loading}
         />
+        
+        {/* Pagination */}
+        {totalCount > ITEMS_PER_PAGE && (
+          <div className="mt-6 pt-6 border-t border-slate-700/50 flex justify-center">
+            <PaginationControls
+              currentPage={currentPage}
+              totalItems={totalCount}
+              itemsPerPage={ITEMS_PER_PAGE}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        )}
       </Card>
 
       {/* Edit Dialog */}
