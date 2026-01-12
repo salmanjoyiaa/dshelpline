@@ -9,13 +9,13 @@ interface StatusBadgeProps {
 }
 
 const statusConfig: Record<StatusType, { bg: string; text: string; label: string }> = {
-  pending: { bg: 'bg-yellow-500/20', text: 'text-yellow-400', label: 'Pending' },
-  assigned: { bg: 'bg-blue-500/20', text: 'text-blue-400', label: 'Assigned' },
-  in_progress: { bg: 'bg-cyan-500/20', text: 'text-cyan-400', label: 'In Progress' },
-  completed: { bg: 'bg-green-500/20', text: 'text-green-400', label: 'Completed' },
-  cancelled: { bg: 'bg-red-500/20', text: 'text-red-400', label: 'Cancelled' },
-  active: { bg: 'bg-green-500/20', text: 'text-green-400', label: 'Active' },
-  inactive: { bg: 'bg-slate-500/20', text: 'text-slate-400', label: 'Inactive' },
+  pending: { bg: 'bg-yellow-500/20', text: 'text-yellow-300', label: 'Pending' },
+  assigned: { bg: 'bg-blue-500/20', text: 'text-blue-300', label: 'Assigned' },
+  in_progress: { bg: 'bg-cyan-500/20', text: 'text-cyan-300', label: 'In Progress' },
+  completed: { bg: 'bg-green-500/20', text: 'text-green-300', label: 'Completed' },
+  cancelled: { bg: 'bg-red-500/20', text: 'text-red-300', label: 'Cancelled' },
+  active: { bg: 'bg-green-500/20', text: 'text-green-300', label: 'Active' },
+  inactive: { bg: 'bg-slate-500/20', text: 'text-slate-300', label: 'Inactive' },
 }
 
 export function StatusBadge({ status, label, size = 'md' }: StatusBadgeProps) {

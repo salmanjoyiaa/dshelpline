@@ -69,7 +69,7 @@ export function EditProviderDialog({
         status: provider.status,
       });
     }
-  }, [provider, reset]);
+  }, [provider?.id, reset]);
 
   const status = watch('status');
 

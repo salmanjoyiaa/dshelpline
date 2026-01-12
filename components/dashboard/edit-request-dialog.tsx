@@ -69,7 +69,7 @@ export function EditRequestDialog({
         assigned_provider_id: request.assigned_provider_id || undefined,
       });
     }
-  }, [request, reset]);
+  }, [request?.id, reset]);
 
   const status = watch('status');
   const assignedProviderId = watch('assigned_provider_id');
