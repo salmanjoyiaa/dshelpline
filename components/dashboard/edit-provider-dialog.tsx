@@ -1,8 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { createClient } from '@/lib/supabase/client';
-import { ServiceProvider, EditProviderFormData } from '@/lib/types';
+import { ServiceProvider } from '@/lib/types';
+import { providerEditSchema, type ProviderEditFormData } from '@/lib/validators';
 import {
   Dialog,
   DialogContent,
@@ -11,8 +14,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormField } from '@/components/ui/form-field';
 import {
   Select,
   SelectContent,
@@ -21,7 +23,6 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { AlertCircle, Loader2 } from 'lucide-react';
-import { isValidEmail, isValidPhoneNumber } from '@/lib/utils';
 
 interface EditProviderDialogProps {
   provider: ServiceProvider | null;
@@ -39,67 +40,52 @@ export function EditProviderDialog({
   onError,
 }: EditProviderDialogProps) {
   const supabase = createClient();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState<EditProviderFormData>({
-    name: provider?.name || '',
-    phone: provider?.phone || '',
-    email: provider?.email || '',
-    status: provider?.status || 'active',
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    watch,
+    setValue,
+    reset,
+  } = useForm<ProviderEditFormData>({
+    resolver: zodResolver(providerEditSchema),
+    mode: 'onBlur',
+    values: {
+      name: provider?.name || '',
+      email: provider?.email || '',
+      phone: provider?.phone || '',
+      status: provider?.status || 'active',
+    },
   });
 
-  // Update form data when provider changes
-  if (
-    provider &&
-    (formData.name !== provider.name ||
-      formData.email !== provider.email ||
-      formData.phone !== provider.phone ||
-      formData.status !== provider.status)
-  ) {
-    setFormData({
-      name: provider.name,
-      phone: provider.phone,
-      email: provider.email,
-      status: provider.status,
-    });
-  }
+  useEffect(() => {
+    if (provider) {
+      reset({
+        name: provider.name,
+        email: provider.email,
+        phone: provider.phone,
+        status: provider.status,
+      });
+    }
+  }, [provider, reset]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const status = watch('status');
+
+  const onSubmit = async (data: ProviderEditFormData) => {
     if (!provider) return;
 
-    setError(null);
-    setLoading(true);
+    setSubmitError(null);
 
     try {
-      // Validate required fields
-      if (!formData.name || !formData.phone || !formData.email) {
-        setError('All fields are required');
-        setLoading(false);
-        return;
-      }
-
-      // Validate email
-      if (!isValidEmail(formData.email)) {
-        setError('Invalid email address');
-        setLoading(false);
-        return;
-      }
-
-      // Validate phone
-      if (!isValidPhoneNumber(formData.phone)) {
-        setError('Phone number must be 10 digits');
-        setLoading(false);
-        return;
-      }
-
       const { error: updateError } = await supabase
         .from('service_providers')
         .update({
-          name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          status: formData.status,
+          name: data.name,
+          phone: data.phone,
+          email: data.email,
+          status: data.status,
           updated_at: new Date().toISOString(),
         })
         .eq('id', provider.id);
@@ -111,10 +97,8 @@ export function EditProviderDialog({
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Failed to update provider';
-      setError(message);
+      setSubmitError(message);
       onError(message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -128,79 +112,67 @@ export function EditProviderDialog({
           </DialogDescription>
         </DialogHeader>
 
-        {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-red-800">{error}</p>
+        {submitError && (
+          <div className="p-4 bg-red-950/30 border border-red-500/30 rounded-lg flex gap-3">
+            <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-red-400">{submitError}</p>
           </div>
         )}
 
         {provider && (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="name" className="text-sm font-medium">
-                Full Name *
-              </Label>
-              <Input
-                id="name"
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              label="Full Name"
+              error={errors.name}
+              required
+            >
+              <input
+                {...register('name')}
                 placeholder="John Doe"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                disabled={loading}
-                required
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                disabled={isSubmitting}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <Label htmlFor="email" className="text-sm font-medium">
-                Email *
-              </Label>
-              <Input
-                id="email"
+            <FormField
+              label="Email"
+              error={errors.email}
+              required
+            >
+              <input
+                {...register('email')}
                 type="email"
                 placeholder="john@example.com"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                disabled={loading}
-                required
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                disabled={isSubmitting}
               />
-            </div>
+            </FormField>
 
-            <div>
-              <Label htmlFor="phone" className="text-sm font-medium">
-                Phone Number *
-              </Label>
-              <Input
-                id="phone"
+            <FormField
+              label="Phone Number"
+              error={errors.phone}
+              required
+            >
+              <input
+                {...register('phone')}
                 placeholder="555-1234"
-                value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                disabled={loading}
-                required
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+                disabled={isSubmitting}
               />
-            </div>
+            </FormField>
 
             <div>
-              <Label htmlFor="status" className="text-sm font-medium">
-                Status
-              </Label>
+              <label className="text-sm font-medium text-white mb-2 block">
+                Status *
+              </label>
               <Select
-                value={formData.status}
+                value={status}
                 onValueChange={(value) =>
-                  setFormData({
-                    ...formData,
-                    status: value as 'active' | 'inactive',
-                  })
+                  setValue('status', value as ProviderEditFormData['status'])
                 }
-                disabled={loading}
+                disabled={isSubmitting}
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-slate-800 border-slate-700">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -215,13 +187,17 @@ export function EditProviderDialog({
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
-                disabled={loading}
+                disabled={isSubmitting}
                 className="flex-1"
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={loading} className="flex-1">
-                {loading ? (
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-black font-semibold"
+              >
+                {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Updating...
