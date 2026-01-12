@@ -15,7 +15,7 @@ export function DashboardShell({ children, user }: DashboardShellProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="flex h-screen overflow-hidden bg-gradient-to-br from-black via-slate-900 to-slate-800">
       <DashboardSidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
       <div className="flex flex-1 flex-col overflow-hidden">
         <DashboardHeader user={user} />

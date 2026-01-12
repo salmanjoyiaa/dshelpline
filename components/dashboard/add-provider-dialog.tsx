@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { createClient } from '@/lib/supabase/client';
-import { AddProviderFormData } from '@/lib/types';
+import { providerSchema, type ProviderFormData } from '@/lib/validators';
 import {
   Dialog,
   DialogContent,
@@ -12,10 +14,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormField } from '@/components/ui/form-field';
 import { AlertCircle, Plus, Loader2 } from 'lucide-react';
-import { isValidEmail, isValidPhoneNumber } from '@/lib/utils';
 
 interface AddProviderDialogProps {
   organizationId: string;
@@ -30,165 +30,124 @@ export function AddProviderDialog({
 }: AddProviderDialogProps) {
   const supabase = createClient();
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [formData, setFormData] = useState<AddProviderFormData>({
-    name: '',
-    phone: '',
-    email: '',
+  const [apiError, setApiError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<ProviderFormData>({
+    resolver: zodResolver(providerSchema),
+    mode: 'onBlur',
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
+  const onSubmit = async (data: ProviderFormData) => {
+    setApiError(null);
 
     try {
-      // Validate required fields
-      if (!formData.name || !formData.phone || !formData.email) {
-        setError('All fields are required');
-        setLoading(false);
-        return;
-      }
-
-      // Validate email
-      if (!isValidEmail(formData.email)) {
-        setError('Invalid email address');
-        setLoading(false);
-        return;
-      }
-
-      // Validate phone
-      if (!isValidPhoneNumber(formData.phone)) {
-        setError('Phone number must be 10 digits');
-        setLoading(false);
-        return;
-      }
-
       const { error: insertError } = await supabase
         .from('service_providers')
         .insert([
           {
             organization_id: organizationId,
-            name: formData.name,
-            phone: formData.phone,
-            email: formData.email,
-            status: 'active',
-            total_jobs_completed: 0,
-            rating: 0,
+            name: data.name,
+            phone: data.phone,
+            email: data.email,
+            status: data.status,
+            total_jobs_completed: data.total_jobs_completed,
+            rating: data.rating,
           },
         ]);
 
       if (insertError) throw insertError;
 
-      setFormData({
-        name: '',
-        phone: '',
-        email: '',
-      });
+      reset();
       setOpen(false);
       onSuccess();
     } catch (err) {
       const message =
         err instanceof Error ? err.message : 'Failed to create provider';
-      setError(message);
+      setApiError(message);
       onError(message);
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
           <Plus className="w-4 h-4 mr-2" />
           Add New Provider
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Add New Service Provider</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-white">Add New Service Provider</DialogTitle>
+          <DialogDescription className="text-slate-400">
             Register a new service provider to your organization.
           </DialogDescription>
         </DialogHeader>
 
-        {error && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-red-800">{error}</p>
+        {apiError && (
+          <div className="p-4 bg-red-950/30 border border-red-500/50 rounded-lg flex gap-3">
+            <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+            <p className="text-sm text-red-300">{apiError}</p>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="name" className="text-sm font-medium">
-              Full Name *
-            </Label>
-            <Input
-              id="name"
-              placeholder="John Doe"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              disabled={loading}
-              required
-            />
-          </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            label="Full Name"
+            placeholder="John Doe"
+            error={errors.name}
+            required
+            {...register('name')}
+            disabled={isSubmitting}
+          />
 
-          <div>
-            <Label htmlFor="email" className="text-sm font-medium">
-              Email *
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="john@example.com"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              disabled={loading}
-              required
-            />
-          </div>
+          <FormField
+            label="Email"
+            type="email"
+            placeholder="john@example.com"
+            error={errors.email}
+            required
+            {...register('email')}
+            disabled={isSubmitting}
+          />
 
-          <div>
-            <Label htmlFor="phone" className="text-sm font-medium">
-              Phone Number *
-            </Label>
-            <Input
-              id="phone"
-              placeholder="555-1234"
-              value={formData.phone}
-              onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
-              }
-              disabled={loading}
-              required
-            />
-          </div>
+          <FormField
+            label="Phone"
+            type="tel"
+            placeholder="(555) 123-4567"
+            error={errors.phone}
+            required
+            {...register('phone')}
+            disabled={isSubmitting}
+          />
 
-          <div className="flex gap-3 pt-4">
+          <div className="pt-4 flex gap-3 justify-end">
             <Button
               type="button"
               variant="outline"
               onClick={() => setOpen(false)}
-              disabled={loading}
-              className="flex-1"
+              disabled={isSubmitting}
+              className="border-slate-700 text-white hover:bg-slate-800"
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? (
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold"
+            >
+              {isSubmitting ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Adding...
+                  Creating...
                 </>
               ) : (
-                'Add Provider'
+                'Create Provider'
               )}
             </Button>
           </div>

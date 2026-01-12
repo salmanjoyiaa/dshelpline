@@ -29,20 +29,20 @@ export function DashboardHeader({ user }: HeaderProps) {
     : user?.email?.[0]?.toUpperCase() || "U"
 
   return (
-    <header className="flex h-20 items-center justify-between border-b border-slate-200 bg-white px-8 shadow-sm">
+    <header className="flex h-20 items-center justify-between border-b border-yellow-500/20 bg-slate-900/50 backdrop-blur px-8 shadow-lg z-10">
       {/* Search */}
       <div className="relative w-full max-w-lg">
         <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
         <Input 
           placeholder="Search requests, providers..." 
-          className="pl-12 border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-blue-500 focus:ring-blue-500 rounded-lg" 
+          className="pl-12 border-slate-700 bg-slate-800 text-white placeholder:text-slate-400 focus:bg-slate-750 focus:border-yellow-400 focus:ring-yellow-400 rounded-lg" 
         />
       </div>
 
       {/* Actions */}
       <div className="flex items-center gap-4 ml-6">
         {/* Quick Add */}
-        <Button size="sm" className="ai-gradient hover:opacity-90 text-white shadow-lg hover:shadow-xl transition-all duration-200 min-h-[44px] touch-manipulation" asChild>
+        <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold shadow-lg hover:shadow-xl transition-all duration-200 min-h-[44px] touch-manipulation" asChild>
           <Link href="/dashboard/requests/new" aria-label="Create new request">
             <Plus className="mr-2 h-4 w-4" />
             <span className="hidden sm:inline">New Request</span>
