@@ -113,55 +113,39 @@ export function AddRequestDialog({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             label="Customer Name"
+            placeholder="John Doe"
             error={errors.customer_name}
             required
-          >
-            <input
-              {...register('customer_name')}
-              placeholder="John Doe"
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-              disabled={isSubmitting}
-            />
-          </FormField>
+            disabled={isSubmitting}
+            {...register('customer_name')}
+          />
 
           <FormField
             label="Phone Number"
+            placeholder="555-1234"
             error={errors.customer_phone}
             required
-          >
-            <input
-              {...register('customer_phone')}
-              placeholder="555-1234"
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-              disabled={isSubmitting}
-            />
-          </FormField>
+            disabled={isSubmitting}
+            {...register('customer_phone')}
+          />
 
           <FormField
             label="Address"
+            placeholder="123 Main St, City, State"
             error={errors.customer_address}
             required
-          >
-            <input
-              {...register('customer_address')}
-              placeholder="123 Main St, City, State"
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-              disabled={isSubmitting}
-            />
-          </FormField>
+            disabled={isSubmitting}
+            {...register('customer_address')}
+          />
 
           <FormField
             label="Problem Description"
+            placeholder="Describe the issue..."
             error={errors.problem_description}
             required
-          >
-            <input
-              {...register('problem_description')}
-              placeholder="Describe the issue..."
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
-              disabled={isSubmitting}
-            />
-          </FormField>
+            disabled={isSubmitting}
+            {...register('problem_description')}
+          />
 
           <div>
             <label className="text-sm font-medium text-white mb-2 block">
