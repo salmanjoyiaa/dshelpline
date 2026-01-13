@@ -67,6 +67,11 @@ function DashboardLayoutContent({
     fetchUser();
   }, [supabase]);
 
+  if (!mounted) {
+    // Avoid hydration mismatches by not rendering until mounted
+    return null;
+  }
+
   const handleSignOut = async () => {
     setLoading(true);
     await supabase.auth.signOut();
