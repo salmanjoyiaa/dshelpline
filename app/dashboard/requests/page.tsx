@@ -37,6 +37,30 @@ export default function RequestsPage() {
   const [deletingRequest, setDeletingRequest] = useState<ServiceRequest | null>(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
+  const resolveOrganizationId = useCallback(
+    async (userId: string): Promise<string> => {
+      const { data: userRow, error: userError } = await supabase
+        .from('users')
+        .select('organization_id')
+        .eq('id', userId)
+        .single();
+
+      if (userRow?.organization_id) return userRow.organization_id;
+
+      if (userError) {
+        const { data: profileRow } = await supabase
+          .from('profiles')
+          .select('organization_id')
+          .eq('id', userId)
+          .single();
+        if (profileRow?.organization_id) return profileRow.organization_id;
+      }
+
+      return userId;
+    },
+    [supabase]
+  );
+
   const loadInitialData = useCallback(async () => {
     try {
       const {
@@ -45,25 +69,8 @@ export default function RequestsPage() {
 
       if (!user) return;
 
-      // Try to get user's organization
-      let orgId = user.id; // fallback org ID
-      try {
-        const { data: userData } = await supabase
-          .from('profiles')
-          .select('organization_id')
-          .eq('id', user.id)
-          .single();
-
-        if (userData?.organization_id) {
-          orgId = userData.organization_id;
-          setUserOrg(userData.organization_id);
-        } else {
-          setUserOrg(user.id);
-        }
-      } catch (orgError) {
-        logger.warn('Could not fetch organization', orgError);
-        setUserOrg(user.id);
-      }
+      const orgId = await resolveOrganizationId(user.id);
+      setUserOrg(orgId);
 
       // Try to fetch providers (no pagination)
       try {
@@ -96,18 +103,7 @@ export default function RequestsPage() {
         return;
       }
 
-      // Get org ID
-      let orgId = user.id;
-      try {
-        const { data: userData } = await supabase
-          .from('profiles')
-          .select('organization_id')
-          .eq('id', user.id)
-          .single();
-        if (userData?.organization_id) orgId = userData.organization_id;
-      } catch (e) {
-        logger.warn('Could not fetch organization', e);
-      }
+      const orgId = await resolveOrganizationId(user.id);
 
       // Fetch requests with pagination
       const start = (page - 1) * ITEMS_PER_PAGE;
