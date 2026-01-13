@@ -152,8 +152,8 @@ export default function ProvidersPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Providers</h1>
-          <p className="mt-1 text-gray-400">
+          <h1 className="text-3xl font-bold dark:text-white text-gray-900">Providers</h1>
+          <p className="mt-1 dark:text-gray-400 text-gray-600">
             Manage your service providers
           </p>
         </div>
@@ -173,7 +173,7 @@ export default function ProvidersPage() {
       </div>
 
       {/* Table */}
-      <Card className="p-6 border-2 shadow-md hover:shadow-lg transition-all bg-slate-900/40 backdrop-blur-xl border-slate-700/50">
+      <Card className="p-6 border-2 shadow-md hover:shadow-lg transition-all dark:bg-slate-900/40 bg-white dark:backdrop-blur-xl dark:border-slate-700/50 border-gray-200">
         <ProvidersTable
           providers={providers}
           onEdit={setEditingProvider}
@@ -183,7 +183,7 @@ export default function ProvidersPage() {
         
         {/* Pagination */}
         {totalCount > ITEMS_PER_PAGE && (
-          <div className="mt-6 pt-6 border-t border-slate-700/50 flex justify-center">
+          <div className="mt-6 pt-6 border-t dark:border-slate-700/50 border-gray-200 flex justify-center">
             <PaginationControls
               currentPage={currentPage}
               totalItems={totalCount}

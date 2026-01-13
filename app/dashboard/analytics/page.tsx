@@ -128,8 +128,8 @@ export default function AnalyticsPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white">Analytics</h1>
-        <p className="mt-1 text-gray-400">Monitor your business performance</p>
+        <h1 className="text-3xl font-bold dark:text-white text-gray-900">Analytics</h1>
+        <p className="mt-1 dark:text-gray-400 text-gray-600">Monitor your business performance</p>
       </div>
 
       {/* KPI Cards */}
@@ -157,31 +157,31 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Detailed Analytics */}
-      <Card className="shadow-md hover:shadow-lg border-2 transition-all bg-slate-900/40 backdrop-blur-xl border-slate-700/50">
-        <div className="p-6 border-b border-slate-700/50">
-          <h2 className="text-xl font-bold text-white">Request Statistics</h2>
+      <Card className="shadow-md hover:shadow-lg border-2 transition-all dark:bg-slate-900/40 bg-white dark:backdrop-blur-xl dark:border-slate-700/50 border-gray-200">
+        <div className="p-6 border-b dark:border-slate-700/50 border-gray-200">
+          <h2 className="text-xl font-bold dark:text-white text-gray-900">Request Statistics</h2>
         </div>
         <div className="p-6">
           <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="bg-slate-800/50">
+            <TabsList className="dark:bg-slate-800/50 bg-gray-100">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="providers">Providers</TabsTrigger>
             </TabsList>
             <TabsContent value="overview" className="mt-6">
               <div className="space-y-6">
                 <div>
-                  <h3 className="font-semibold mb-4 text-white">Status Distribution</h3>
+                  <h3 className="font-semibold mb-4 dark:text-white text-gray-900">Status Distribution</h3>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                     {[
-                      { label: 'Pending', value: requests.filter((r) => r.status === 'pending').length, color: 'bg-yellow-900/40 border border-yellow-700/50 hover:bg-yellow-900/60' },
-                      { label: 'Assigned', value: requests.filter((r) => r.status === 'assigned').length, color: 'bg-blue-900/40 border border-blue-700/50 hover:bg-blue-900/60' },
-                      { label: 'In Progress', value: requests.filter((r) => r.status === 'in_progress').length, color: 'bg-orange-900/40 border border-orange-700/50 hover:bg-orange-900/60' },
-                      { label: 'Completed', value: requests.filter((r) => r.status === 'completed').length, color: 'bg-green-900/40 border border-green-700/50 hover:bg-green-900/60' },
-                      { label: 'Cancelled', value: requests.filter((r) => r.status === 'cancelled').length, color: 'bg-slate-700/40 border border-slate-600/50 hover:bg-slate-700/60' },
+                      { label: 'Pending', value: requests.filter((r) => r.status === 'pending').length, color: 'dark:bg-yellow-900/40 bg-yellow-100 border dark:border-yellow-700/50 border-yellow-300 dark:hover:bg-yellow-900/60 hover:bg-yellow-200' },
+                      { label: 'Assigned', value: requests.filter((r) => r.status === 'assigned').length, color: 'dark:bg-blue-900/40 bg-blue-100 border dark:border-blue-700/50 border-blue-300 dark:hover:bg-blue-900/60 hover:bg-blue-200' },
+                      { label: 'In Progress', value: requests.filter((r) => r.status === 'in_progress').length, color: 'dark:bg-orange-900/40 bg-orange-100 border dark:border-orange-700/50 border-orange-300 dark:hover:bg-orange-900/60 hover:bg-orange-200' },
+                      { label: 'Completed', value: requests.filter((r) => r.status === 'completed').length, color: 'dark:bg-green-900/40 bg-green-100 border dark:border-green-700/50 border-green-300 dark:hover:bg-green-900/60 hover:bg-green-200' },
+                      { label: 'Cancelled', value: requests.filter((r) => r.status === 'cancelled').length, color: 'dark:bg-slate-700/40 bg-slate-100 border dark:border-slate-600/50 border-slate-300 dark:hover:bg-slate-700/60 hover:bg-slate-200' },
                     ].map((status) => (
                       <div key={status.label} className={`${status.color} p-4 rounded-lg text-center transition`}>
-                        <p className="text-2xl font-bold text-white">{status.value}</p>
-                        <p className="text-sm text-slate-300">{status.label}</p>
+                        <p className="text-2xl font-bold dark:text-white text-gray-900">{status.value}</p>
+                        <p className="text-sm dark:text-slate-300 text-gray-600">{status.label}</p>
                       </div>
                     ))}
                   </div>
@@ -190,41 +190,41 @@ export default function AnalyticsPage() {
             </TabsContent>
             <TabsContent value="providers" className="mt-6">
               <div>
-                <h3 className="font-semibold text-white mb-4">Provider Performance</h3>
+                <h3 className="font-semibold dark:text-white text-gray-900 mb-4">Provider Performance</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-slate-700/50">
-                        <th className="text-left py-3 px-4 font-semibold text-white">Provider</th>
-                        <th className="text-left py-3 px-4 font-semibold text-white">Status</th>
-                        <th className="text-left py-3 px-4 font-semibold text-white">Jobs Done</th>
-                        <th className="text-left py-3 px-4 font-semibold text-white">Rating</th>
+                      <tr className="border-b dark:border-slate-700/50 border-gray-200">
+                        <th className="text-left py-3 px-4 font-semibold dark:text-white text-gray-900">Provider</th>
+                        <th className="text-left py-3 px-4 font-semibold dark:text-white text-gray-900">Status</th>
+                        <th className="text-left py-3 px-4 font-semibold dark:text-white text-gray-900">Jobs Done</th>
+                        <th className="text-left py-3 px-4 font-semibold dark:text-white text-gray-900">Rating</th>
                       </tr>
                     </thead>
                     <tbody>
                       {providers.map((provider) => (
-                        <tr key={provider.id} className="border-b border-slate-700/30 hover:bg-slate-800/30">
-                          <td className="py-3 px-4 text-gray-200">{provider.name}</td>
+                        <tr key={provider.id} className="border-b dark:border-slate-700/30 border-gray-100 dark:hover:bg-slate-800/30 hover:bg-gray-50">
+                          <td className="py-3 px-4 dark:text-gray-200 text-gray-900">{provider.name}</td>
                           <td className="py-3 px-4">
                             <span
                               className={`px-2 py-1 rounded text-xs font-semibold ${
                                 provider.status === 'active'
-                                  ? 'bg-green-900/40 text-green-300'
-                                  : 'bg-slate-700/40 text-slate-300'
+                                  ? 'dark:bg-green-900/40 bg-green-100 dark:text-green-300 text-green-700'
+                                  : 'dark:bg-slate-700/40 bg-slate-100 dark:text-slate-300 text-slate-700'
                               }`}
                             >
                               {provider.status}
                             </span>
                           </td>
-                          <td className="py-3 px-4 text-gray-200">{provider.total_jobs_completed}</td>
-                          <td className="py-3 px-4 font-semibold text-yellow-400">{provider.rating.toFixed(1)} ⭐</td>
+                          <td className="py-3 px-4 dark:text-gray-200 text-gray-900">{provider.total_jobs_completed}</td>
+                          <td className="py-3 px-4 font-semibold dark:text-yellow-400 text-yellow-600">{provider.rating.toFixed(1)} ⭐</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                   {providers.length === 0 && (
                     <div className="text-center py-8">
-                      <p className="text-gray-400">No providers found</p>
+                      <p className="dark:text-gray-400 text-gray-600">No providers found</p>
                     </div>
                   )}
                 </div>

@@ -127,8 +127,8 @@ export default function DashboardPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-        <p className="mt-1 text-gray-400">Welcome back! Here's what's happening today.</p>
+        <h1 className="text-3xl font-bold dark:text-white text-gray-900">Dashboard</h1>
+        <p className="mt-1 dark:text-gray-400 text-gray-600">Welcome back! Here's what's happening today.</p>
       </div>
 
       {/* Stats Cards */}
@@ -173,11 +173,11 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Requests */}
-      <Card className="shadow-md hover:shadow-lg border-2 transition-all bg-slate-900/40 backdrop-blur-xl border-slate-700/50">
-        <div className="p-6 border-b flex items-center justify-between border-slate-700/50">
-          <h2 className="text-xl font-bold text-white">Recent Requests</h2>
+      <Card className="shadow-md hover:shadow-lg border-2 transition-all dark:bg-slate-900/40 bg-white dark:backdrop-blur-xl dark:border-slate-700/50 border-gray-200">
+        <div className="p-6 border-b flex items-center justify-between dark:border-slate-700/50 border-gray-200">
+          <h2 className="text-xl font-bold dark:text-white text-gray-900">Recent Requests</h2>
           <Link href="/dashboard/requests">
-            <Button variant="outline" className="transition-colors border-slate-600 text-slate-300 hover:bg-slate-800/50 hover:text-white">View All</Button>
+            <Button variant="outline" className="transition-colors dark:border-slate-600 border-gray-300 dark:text-slate-300 text-gray-700 dark:hover:bg-slate-800/50 hover:bg-gray-100 dark:hover:text-white hover:text-gray-900">View All</Button>
           </Link>
         </div>
         <div className="p-6">

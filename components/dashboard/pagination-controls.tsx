@@ -78,7 +78,7 @@ export function PaginationControls({
         size="sm"
         onClick={() => onPageChange(Math.max(1, currentPage - 1))}
         disabled={currentPage === 1}
-        className="border-slate-600/50 text-slate-300 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="dark:border-slate-600/50 border-gray-300 dark:text-slate-300 text-gray-700 dark:hover:bg-slate-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <ChevronLeft className="h-4 w-4" />
         <span className="hidden sm:inline ml-1">Previous</span>
@@ -90,7 +90,7 @@ export function PaginationControls({
             return (
               <span
                 key={`ellipsis-${index}`}
-                className="px-2 text-slate-400"
+                className="px-2 dark:text-slate-400 text-gray-500"
               >
                 ...
               </span>
@@ -109,7 +109,7 @@ export function PaginationControls({
               className={cn(
                 isActive
                   ? 'bg-yellow-500 text-black hover:bg-yellow-600'
-                  : 'border-slate-600/50 text-slate-300 hover:bg-slate-700'
+                  : 'dark:border-slate-600/50 border-gray-300 dark:text-slate-300 text-gray-700 dark:hover:bg-slate-700 hover:bg-gray-100'
               )}
             >
               {pageNum}
@@ -123,13 +123,13 @@ export function PaginationControls({
         size="sm"
         onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
         disabled={currentPage === totalPages}
-        className="border-slate-600/50 text-slate-300 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="dark:border-slate-600/50 border-gray-300 dark:text-slate-300 text-gray-700 dark:hover:bg-slate-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <span className="hidden sm:inline mr-1">Next</span>
         <ChevronRight className="h-4 w-4" />
       </Button>
 
-      <span className="ml-4 text-sm text-slate-400">
+      <span className="ml-4 text-sm dark:text-slate-400 text-gray-600">
         Page {currentPage} of {totalPages}
       </span>
     </div>

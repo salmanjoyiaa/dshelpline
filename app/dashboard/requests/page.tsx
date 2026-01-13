@@ -195,8 +195,8 @@ export default function RequestsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Requests</h1>
-          <p className="mt-1 text-gray-400">
+          <h1 className="text-3xl font-bold dark:text-white text-gray-900">Requests</h1>
+          <p className="mt-1 dark:text-gray-400 text-gray-600">
             Manage all your service requests
           </p>
         </div>
@@ -217,9 +217,9 @@ export default function RequestsPage() {
       </div>
 
       {/* Filter */}
-      <Card className="p-4 border-2 bg-slate-900/40 backdrop-blur-xl border-slate-700/50">
+      <Card className="p-4 border-2 dark:bg-slate-900/40 bg-white dark:backdrop-blur-xl dark:border-slate-700/50 border-gray-200">
         <Select value={filter} onValueChange={setFilter}>
-          <SelectTrigger className="w-48 bg-slate-800/50 border-slate-600/50 text-white">
+          <SelectTrigger className="w-48 dark:bg-slate-800/50 bg-white dark:border-slate-600/50 border-gray-300 dark:text-white text-gray-900">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -234,7 +234,7 @@ export default function RequestsPage() {
       </Card>
 
       {/* Table */}
-      <Card className="p-6 border-2 shadow-md hover:shadow-lg transition-all bg-slate-900/40 backdrop-blur-xl border-slate-700/50">
+      <Card className="p-6 border-2 shadow-md hover:shadow-lg transition-all dark:bg-slate-900/40 bg-white dark:backdrop-blur-xl dark:border-slate-700/50 border-gray-200">
         <RequestsTable
           requests={filteredRequests}
           onEdit={setEditingRequest}
@@ -244,7 +244,7 @@ export default function RequestsPage() {
         
         {/* Pagination */}
         {totalCount > ITEMS_PER_PAGE && (
-          <div className="mt-6 pt-6 border-t border-slate-700/50 flex justify-center">
+          <div className="mt-6 pt-6 border-t dark:border-slate-700/50 border-gray-200 flex justify-center">
             <PaginationControls
               currentPage={currentPage}
               totalItems={totalCount}

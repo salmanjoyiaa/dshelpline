@@ -4,21 +4,21 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Dream State AI Brand Colors - 75% Black, 25% Yellow */
-  --bg: oklch(0.12 0 0); /* Dark background */
-  --fg: oklch(0.96 0 0); /* Light text */
-  --muted: oklch(0.24 0.01 50); /* Muted text - slightly yellowish */
-  --surface: oklch(0.15 0 0); /* Surface color */
-  --card-surface: oklch(0.18 0 0); /* Card background */
-  --primary: oklch(0.78 0.24 60); /* Yellow accent - #FFD700 equivalent */
-  --primary-fore: oklch(0.12 0 0); /* Text on yellow - black */
+  /* Dream State AI Brand Colors - Light Theme */
+  --bg: oklch(0.98 0 0); /* Light background */
+  --fg: oklch(0.2 0 0); /* Dark text */
+  --muted: oklch(0.5 0 0); /* Muted text */
+  --surface: oklch(1 0 0); /* Surface color - White */
+  --card-surface: oklch(1 0 0); /* Card background - White */
+  --primary: oklch(0.78 0.24 60); /* Yellow accent */
+  --primary-fore: oklch(0.12 0 0); /* Text on yellow */
   --radius: 12px;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
-  --shadow-md: 0 6px 18px rgba(0,0,0,0.6);
-  --glass-bg: oklch(0.15 0 0 / 0.75); /* Black glass with yellow tint */
-  --glass-border: rgba(255,215,0,0.2); /* Yellow border for glass */
-  --ai-gradient-start: oklch(0.15 0 0); /* Black */
-  --ai-gradient-end: oklch(0.78 0.24 60); /* Yellow */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.1);
+  --ai-gradient-start: oklch(0.95 0 0);
+  --ai-gradient-end: oklch(0.78 0.24 60);
   --yellow-accent: #FFD700;
   --black-bg: #1a1a1a;
 }
