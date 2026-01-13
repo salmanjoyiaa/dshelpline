@@ -18,6 +18,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       enableColorScheme={false}
       storageKey="theme-mode"
       themes={['light', 'dark']}
+      forcedTheme={undefined}
     >
       {children}
     </NextThemesProvider>
