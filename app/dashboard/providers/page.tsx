@@ -39,7 +39,7 @@ export default function ProvidersPage() {
       // Try to get user's organization, but set a default if it fails
       try {
         const { data: userData } = await supabase
-          .from('users')
+          .from('profiles')
           .select('organization_id')
           .eq('id', user.id)
           .single();
@@ -73,7 +73,7 @@ export default function ProvidersPage() {
       let orgId = user.id; // fallback org ID
       try {
         const { data: userData } = await supabase
-          .from('users')
+          .from('profiles')
           .select('organization_id')
           .eq('id', user.id)
           .single();

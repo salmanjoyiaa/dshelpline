@@ -56,39 +56,39 @@ export function ProvidersTable({
   }
 
   return (
-    <div className="border border-slate-700/50 rounded-lg overflow-hidden bg-slate-800/20">
+    <div className="border dark:border-slate-700/50 border-gray-300 rounded-lg overflow-hidden dark:bg-slate-800/20 bg-white">
       <div className="overflow-x-auto">
         <Table>
-          <TableHeader className="sticky top-0 z-10 bg-slate-900/50 backdrop-blur">
-            <TableRow className="border-b border-slate-700/50">
-              <TableHead className="text-slate-300 font-semibold">Name</TableHead>
-              <TableHead className="text-slate-300 font-semibold">Email</TableHead>
-              <TableHead className="text-slate-300 font-semibold">Phone</TableHead>
-              <TableHead className="text-slate-300 font-semibold">Status</TableHead>
-              <TableHead className="text-slate-300 font-semibold">Jobs</TableHead>
-              <TableHead className="text-slate-300 font-semibold">Rating</TableHead>
-              <TableHead className="text-right text-slate-300 font-semibold">Actions</TableHead>
+          <TableHeader className="sticky top-0 z-10 dark:bg-slate-900/50 bg-gray-100 backdrop-blur">
+            <TableRow className="dark:border-b dark:border-slate-700/50 border-b border-gray-200">
+              <TableHead className="dark:text-slate-300 text-gray-700 font-semibold">Name</TableHead>
+              <TableHead className="dark:text-slate-300 text-gray-700 font-semibold">Email</TableHead>
+              <TableHead className="dark:text-slate-300 text-gray-700 font-semibold">Phone</TableHead>
+              <TableHead className="dark:text-slate-300 text-gray-700 font-semibold">Status</TableHead>
+              <TableHead className="dark:text-slate-300 text-gray-700 font-semibold">Jobs</TableHead>
+              <TableHead className="dark:text-slate-300 text-gray-700 font-semibold">Rating</TableHead>
+              <TableHead className="text-right dark:text-slate-300 text-gray-700 font-semibold">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {providers.map((provider) => (
               <TableRow
                 key={provider.id}
-                className="border-b border-slate-700/30 hover:bg-slate-800/50 transition-colors"
+                className="dark:border-b dark:border-slate-700/30 border-b border-gray-200 dark:hover:bg-slate-800/50 hover:bg-gray-50 transition-colors"
               >
-                <TableCell className="font-medium text-slate-200">{provider.name}</TableCell>
-                <TableCell className="text-slate-300 text-sm">{provider.email}</TableCell>
-                <TableCell className="text-slate-300">{formatPhoneNumber(provider.phone)}</TableCell>
+                <TableCell className="font-medium dark:text-slate-200 text-gray-900">{provider.name}</TableCell>
+                <TableCell className="dark:text-slate-300 text-gray-700 text-sm">{provider.email}</TableCell>
+                <TableCell className="dark:text-slate-300 text-gray-700">{formatPhoneNumber(provider.phone)}</TableCell>
                 <TableCell>
                   <StatusBadge
                     status={provider.status as any}
                     size="sm"
                   />
                 </TableCell>
-                <TableCell className="text-slate-300">{provider.total_jobs_completed}</TableCell>
+                <TableCell className="dark:text-slate-300 text-gray-700">{provider.total_jobs_completed}</TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-1.5 text-slate-300">
-                    <span className="text-yellow-400">★</span>
+                  <div className="flex items-center gap-1.5 dark:text-slate-300 text-gray-700">
+                    <span className="dark:text-yellow-400 text-yellow-600">★</span>
                     <span className="font-medium">{provider.rating.toFixed(1)}</span>
                   </div>
                 </TableCell>
@@ -97,7 +97,7 @@ export function ProvidersTable({
                     size="sm"
                     variant="outline"
                     onClick={() => onEdit(provider)}
-                    className="border-slate-600/50 text-slate-300 hover:bg-slate-700 hover:text-white hover:border-slate-500"
+                    className="dark:border-slate-600/50 border-gray-300 dark:text-slate-300 text-gray-700 dark:hover:bg-slate-700 hover:bg-gray-100 dark:hover:text-white hover:text-gray-900 dark:hover:border-slate-500 hover:border-gray-400"
                   >
                     <Edit2 className="w-4 h-4" />
                   </Button>
@@ -105,7 +105,7 @@ export function ProvidersTable({
                     size="sm"
                     variant="outline"
                     onClick={() => onDelete(provider)}
-                    className="border-slate-600/50 text-red-400 hover:bg-red-500/20 hover:border-red-500/50"
+                    className="dark:border-slate-600/50 border-gray-300 dark:text-red-400 text-red-600 dark:hover:bg-red-500/20 hover:bg-red-50 dark:hover:border-red-500/50 hover:border-red-300"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>

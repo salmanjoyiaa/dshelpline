@@ -49,7 +49,7 @@ export default function RequestsPage() {
       let orgId = user.id; // fallback org ID
       try {
         const { data: userData } = await supabase
-          .from('users')
+          .from('profiles')
           .select('organization_id')
           .eq('id', user.id)
           .single();
@@ -100,7 +100,7 @@ export default function RequestsPage() {
       let orgId = user.id;
       try {
         const { data: userData } = await supabase
-          .from('users')
+          .from('profiles')
           .select('organization_id')
           .eq('id', user.id)
           .single();

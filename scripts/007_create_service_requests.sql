@@ -50,6 +50,7 @@ CREATE INDEX IF NOT EXISTS idx_requests_scheduled ON public.service_requests(sch
 -- RLS Policies
 CREATE POLICY "requests_select_own_org" ON public.service_requests
   FOR SELECT USING (
+    deleted_at IS NULL AND
     organization_id IN (
       SELECT organization_id FROM public.profiles WHERE id = auth.uid()
     )
@@ -64,6 +65,7 @@ CREATE POLICY "requests_insert_own_org" ON public.service_requests
 
 CREATE POLICY "requests_update_own_org" ON public.service_requests
   FOR UPDATE USING (
+    deleted_at IS NULL AND
     organization_id IN (
       SELECT organization_id FROM public.profiles WHERE id = auth.uid()
     )
@@ -71,6 +73,7 @@ CREATE POLICY "requests_update_own_org" ON public.service_requests
 
 CREATE POLICY "requests_delete_own_org" ON public.service_requests
   FOR DELETE USING (
+    deleted_at IS NULL AND
     organization_id IN (
       SELECT organization_id FROM public.profiles WHERE id = auth.uid() AND role IN ('owner', 'admin')
     )

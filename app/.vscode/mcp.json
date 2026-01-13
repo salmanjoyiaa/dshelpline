@@ -1,0 +1,19 @@
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "github-token",
+      "description": "Enter your GitHub Personal Access Token",
+      "password": true
+    }
+  ],
+  "servers": {
+    "github-mcp": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github@latest"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github-token}"
+      }
+    }
+  }
+}

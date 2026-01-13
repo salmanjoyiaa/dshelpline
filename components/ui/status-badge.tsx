@@ -8,14 +8,14 @@ interface StatusBadgeProps {
   size?: 'sm' | 'md'
 }
 
-const statusConfig: Record<StatusType, { bg: string; text: string; label: string }> = {
-  pending: { bg: 'bg-yellow-500/20', text: 'text-yellow-300', label: 'Pending' },
-  assigned: { bg: 'bg-blue-500/20', text: 'text-blue-300', label: 'Assigned' },
-  in_progress: { bg: 'bg-cyan-500/20', text: 'text-cyan-300', label: 'In Progress' },
-  completed: { bg: 'bg-green-500/20', text: 'text-green-300', label: 'Completed' },
-  cancelled: { bg: 'bg-red-500/20', text: 'text-red-300', label: 'Cancelled' },
-  active: { bg: 'bg-green-500/20', text: 'text-green-300', label: 'Active' },
-  inactive: { bg: 'bg-slate-500/20', text: 'text-slate-300', label: 'Inactive' },
+const statusConfig: Record<StatusType, { bg: string; text: string; lightBg: string; lightText: string; label: string }> = {
+  pending: { bg: 'bg-yellow-500/20', text: 'text-yellow-300', lightBg: 'dark:bg-yellow-500/20 bg-yellow-100', lightText: 'dark:text-yellow-300 text-yellow-700', label: 'Pending' },
+  assigned: { bg: 'bg-blue-500/20', text: 'text-blue-300', lightBg: 'dark:bg-blue-500/20 bg-blue-100', lightText: 'dark:text-blue-300 text-blue-700', label: 'Assigned' },
+  in_progress: { bg: 'bg-cyan-500/20', text: 'text-cyan-300', lightBg: 'dark:bg-cyan-500/20 bg-cyan-100', lightText: 'dark:text-cyan-300 text-cyan-700', label: 'In Progress' },
+  completed: { bg: 'bg-green-500/20', text: 'text-green-300', lightBg: 'dark:bg-green-500/20 bg-green-100', lightText: 'dark:text-green-300 text-green-700', label: 'Completed' },
+  cancelled: { bg: 'bg-red-500/20', text: 'text-red-300', lightBg: 'dark:bg-red-500/20 bg-red-100', lightText: 'dark:text-red-300 text-red-700', label: 'Cancelled' },
+  active: { bg: 'bg-green-500/20', text: 'text-green-300', lightBg: 'dark:bg-green-500/20 bg-green-100', lightText: 'dark:text-green-300 text-green-700', label: 'Active' },
+  inactive: { bg: 'bg-slate-500/20', text: 'text-slate-300', lightBg: 'dark:bg-slate-500/20 bg-slate-100', lightText: 'dark:text-slate-300 text-slate-700', label: 'Inactive' },
 }
 
 export function StatusBadge({ status, label, size = 'md' }: StatusBadgeProps) {
@@ -27,8 +27,8 @@ export function StatusBadge({ status, label, size = 'md' }: StatusBadgeProps) {
     : 'px-2.5 py-1 text-sm font-medium'
 
   return (
-    <span className={`inline-flex items-center rounded-full ${config.bg} ${config.text} ${sizeClasses}`}>
-      <span className={`inline-block w-1.5 h-1.5 rounded-full ${config.text} mr-1.5`} />
+    <span className={`inline-flex items-center rounded-full ${config.lightBg} ${config.lightText} ${sizeClasses}`}>
+      <span className={`inline-block w-1.5 h-1.5 rounded-full ${config.lightText} mr-1.5`} />
       {displayLabel}
     </span>
   )

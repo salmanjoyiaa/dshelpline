@@ -28,6 +28,7 @@ CREATE INDEX IF NOT EXISTS idx_providers_location ON public.providers USING GIST
 -- RLS Policies
 CREATE POLICY "providers_select_own_org" ON public.providers
   FOR SELECT USING (
+    deleted_at IS NULL AND
     organization_id IN (
       SELECT organization_id FROM public.profiles WHERE id = auth.uid()
     )
@@ -42,6 +43,7 @@ CREATE POLICY "providers_insert_own_org" ON public.providers
 
 CREATE POLICY "providers_update_own_org" ON public.providers
   FOR UPDATE USING (
+    deleted_at IS NULL AND
     organization_id IN (
       SELECT organization_id FROM public.profiles WHERE id = auth.uid() AND role IN ('owner', 'admin')
     )
@@ -49,6 +51,7 @@ CREATE POLICY "providers_update_own_org" ON public.providers
 
 CREATE POLICY "providers_delete_own_org" ON public.providers
   FOR DELETE USING (
+    deleted_at IS NULL AND
     organization_id IN (
       SELECT organization_id FROM public.profiles WHERE id = auth.uid() AND role IN ('owner', 'admin')
     )
