@@ -29,7 +29,7 @@ const footerLinks = {
 
 export function MarketingFooter() {
   return (
-    <footer className="border-t border-yellow-600/20 bg-black">
+    <footer className="border-t dark:border-yellow-600/20 border-yellow-500/30 dark:bg-black bg-white">
       <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 lg:px-12 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-6">
           {/* Brand */}
@@ -38,24 +38,24 @@ export function MarketingFooter() {
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-yellow-400 to-yellow-600 shadow-lg group-hover:shadow-xl transition-shadow">
                 <Zap className="h-6 w-6 text-black" />
               </div>
-              <span className="text-2xl font-bold text-white">Dream State AI</span>
+              <span className="text-2xl font-bold dark:text-white text-gray-900">Dream State AI</span>
             </Link>
-            <p className="max-w-xs text-base leading-relaxed text-gray-300">
+            <p className="max-w-xs text-base leading-relaxed dark:text-gray-300 text-gray-600">
               AI-powered solutions that transform how you manage operations.
-              <strong className="text-yellow-400"> Intelligent. Automated. Scalable.</strong>
+              <strong className="text-yellow-500"> Intelligent. Automated. Scalable.</strong>
             </p>
           </div>
 
           {/* Links */}
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
-              <h3 className="text-sm font-bold text-white uppercase tracking-wide">{category}</h3>
+              <h3 className="text-sm font-bold dark:text-white text-gray-900 uppercase tracking-wide">{category}</h3>
               <ul className="mt-6 space-y-4">
                 {links.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-base text-gray-300 transition-all hover:text-yellow-400 hover:translate-x-1 inline-block"
+                      className="text-base dark:text-gray-300 text-gray-600 transition-all hover:text-yellow-500 hover:translate-x-1 inline-block"
                     >
                       {link.label}
                     </Link>
@@ -67,15 +67,15 @@ export function MarketingFooter() {
         </div>
 
         {/* Divider & Bottom */}
-        <div className="mt-12 pt-8 border-t border-yellow-600/20 space-y-4">
+        <div className="mt-12 pt-8 border-t dark:border-yellow-600/20 border-yellow-500/30 space-y-4">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <p className="text-sm text-gray-400 font-medium">
+            <p className="text-sm dark:text-gray-400 text-gray-500 font-medium">
               &copy; {new Date().getFullYear()} Dream State AI. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <Link
                 href="#"
-                className="text-gray-300 transition-all hover:text-yellow-400 hover:scale-110"
+                className="dark:text-gray-300 text-gray-600 transition-all hover:text-yellow-500 hover:scale-110"
                 aria-label="Twitter"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -84,7 +84,7 @@ export function MarketingFooter() {
               </Link>
               <Link
                 href="#"
-                className="text-gray-300 transition-colors hover:text-yellow-400"
+                className="dark:text-gray-300 text-gray-600 transition-colors hover:text-yellow-500"
                 aria-label="LinkedIn"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -93,7 +93,7 @@ export function MarketingFooter() {
               </Link>
               <Link
                 href="#"
-                className="text-gray-300 transition-colors hover:text-yellow-400"
+                className="dark:text-gray-300 text-gray-600 transition-colors hover:text-yellow-500"
                 aria-label="GitHub"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

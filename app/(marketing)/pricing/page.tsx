@@ -10,13 +10,13 @@ export const metadata: Metadata = {
 export default function PricingPage() {
   return (
     <>
-      <section className="py-16 sm:py-24 bg-black">
+      <section className="py-16 sm:py-24 dark:bg-black bg-gray-50">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <div className="inline-block bg-yellow-500/20 text-yellow-300 px-4 py-2 rounded-full text-sm font-medium mb-6 border border-yellow-500/30">
+          <div className="inline-block bg-yellow-500/20 text-yellow-600 dark:text-yellow-300 px-4 py-2 rounded-full text-sm font-medium mb-6 border border-yellow-500/30">
             Simple & Transparent Pricing
           </div>
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl text-white">Plans for Every Stage</h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-300">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl dark:text-white text-gray-900">Plans for Every Stage</h1>
+          <p className="mx-auto mt-6 max-w-2xl text-lg dark:text-gray-300 text-gray-600">
             Start with a 14-day free trial. No credit card required. Scale as you grow.
           </p>
         </div>

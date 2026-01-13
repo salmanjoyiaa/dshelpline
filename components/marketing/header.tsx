@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Menu, X, Sun, Moon } from "lucide-react"
 import { DSLogo } from "@/components/ds-logo"
@@ -14,46 +15,27 @@ const navLinks = [
 
 export function MarketingHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(true)
   const [mounted, setMounted] = useState(false)
+  const { theme, setTheme } = useTheme()
+  const isDarkMode = theme === 'dark'
 
-  // Initialize theme from localStorage
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme-mode')
-    if (savedTheme) {
-      setIsDarkMode(savedTheme === 'dark')
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      setIsDarkMode(prefersDark)
-    }
     setMounted(true)
   }, [])
 
   const handleThemeToggle = () => {
-    const newMode = !isDarkMode
-    setIsDarkMode(newMode)
-    localStorage.setItem('theme-mode', newMode ? 'dark' : 'light')
-    
-    // Update HTML element class
-    if (newMode) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-    
-    // Dispatch custom event to notify other components
-    window.dispatchEvent(new CustomEvent('themeChange', { detail: { isDarkMode: newMode } }))
+    setTheme(isDarkMode ? 'light' : 'dark')
   }
 
   if (!mounted) {
     return (
-      <header className="sticky top-0 z-50 w-full border-b border-yellow-600/20 bg-black/80 backdrop-blur-2xl supports-[backdrop-filter]:bg-black/70">
+      <header className="sticky top-0 z-50 w-full border-b dark:border-yellow-600/20 border-yellow-500/30 dark:bg-black/80 bg-white/80 backdrop-blur-2xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl shadow-lg group-hover:shadow-xl transition-shadow">
               <DSLogo size={44} />
             </div>
-            <span className="text-2xl font-bold text-yellow-400 hidden sm:inline">Dream State AI</span>
+            <span className="text-2xl font-bold text-yellow-500 hidden sm:inline">Dream State AI</span>
           </Link>
         </div>
       </header>
@@ -61,14 +43,14 @@ export function MarketingHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-yellow-600/20 bg-black/80 backdrop-blur-2xl supports-[backdrop-filter]:bg-black/70">
+    <header className="sticky top-0 z-50 w-full border-b dark:border-yellow-600/20 border-yellow-500/30 dark:bg-black/80 bg-white/80 backdrop-blur-2xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 sm:px-8 lg:px-12">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl shadow-lg group-hover:shadow-xl transition-shadow">
             <DSLogo size={44} />
           </div>
-          <span className="text-2xl font-bold text-yellow-400 hidden sm:inline">Dream State AI</span>
+          <span className="text-2xl font-bold text-yellow-500 hidden sm:inline">Dream State AI</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -77,10 +59,10 @@ export function MarketingHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-semibold text-gray-300 transition-colors hover:text-yellow-400 relative group"
+              className="text-sm font-semibold dark:text-gray-300 text-gray-700 transition-colors hover:text-yellow-500 relative group"
             >
               {link.label}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full" />
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full" />
             </Link>
           ))}
         </nav>
@@ -89,7 +71,7 @@ export function MarketingHeader() {
         <div className="hidden items-center gap-3 md:flex">
           <button
             onClick={handleThemeToggle}
-            className="p-2 rounded-lg hover:bg-yellow-400/10 transition text-gray-300 hover:text-yellow-400"
+            className="p-2 rounded-lg dark:hover:bg-yellow-400/10 hover:bg-yellow-100 transition dark:text-gray-300 text-gray-700 hover:text-yellow-500"
             title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
             {isDarkMode ? (
@@ -98,17 +80,17 @@ export function MarketingHeader() {
               <Moon className="w-5 h-5" />
             )}
           </button>
-          <Button variant="ghost" asChild className="text-sm text-gray-300 hover:text-yellow-400 hover:bg-yellow-400/10 font-medium">
+          <Button variant="ghost" asChild className="text-sm dark:text-gray-300 text-gray-700 hover:text-yellow-500 dark:hover:bg-yellow-400/10 hover:bg-yellow-100 font-medium">
             <Link href="/login">Log in</Link>
           </Button>
-          <Button asChild className="bg-yellow-400 hover:bg-yellow-500 text-black text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm transition-all duration-300">
+          <Button asChild className="bg-yellow-500 hover:bg-yellow-600 text-black text-sm font-semibold px-5 py-2.5 rounded-lg shadow-sm transition-all duration-300">
             <Link href="/signup">Get Started</Link>
           </Button>
         </div>
 
         {/* Mobile Menu Toggle */}
         <button
-          className="flex h-10 w-10 items-center justify-center rounded-lg md:hidden text-yellow-400 hover:bg-yellow-400/10 transition-colors"
+          className="flex h-10 w-10 items-center justify-center rounded-lg md:hidden text-yellow-500 dark:hover:bg-yellow-400/10 hover:bg-yellow-100 transition-colors"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -118,23 +100,23 @@ export function MarketingHeader() {
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="border-t border-yellow-600/20 md:hidden">
+        <div className="border-t dark:border-yellow-600/20 border-yellow-500/30 md:hidden dark:bg-black bg-white">
           <nav className="flex flex-col gap-1 p-4">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 transition-colors hover:bg-yellow-400/10 hover:text-yellow-400"
+                className="rounded-md px-3 py-2 text-sm font-medium dark:text-gray-300 text-gray-700 transition-colors dark:hover:bg-yellow-400/10 hover:bg-yellow-100 hover:text-yellow-500"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
               </Link>
             ))}
-            <div className="mt-4 flex flex-col gap-2 border-t border-yellow-600/20 pt-4">
-              <Button variant="outline" asChild className="w-full bg-transparent border-yellow-400 text-yellow-400 hover:bg-yellow-400/10">
+            <div className="mt-4 flex flex-col gap-2 border-t dark:border-yellow-600/20 border-yellow-500/30 pt-4">
+              <Button variant="outline" asChild className="w-full bg-transparent border-yellow-500 text-yellow-600 hover:bg-yellow-100">
                 <Link href="/login">Log in</Link>
               </Button>
-              <Button asChild className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold">
+              <Button asChild className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-semibold">
                 <Link href="/signup">Start Free Trial</Link>
               </Button>
             </div>
